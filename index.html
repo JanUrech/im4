@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h2>Nutzer erfassen</h2>
+    <form method="post" action="php/BMI Calculator.php">
+        <label>Name: <input type="text" name="name" required></label><br><br>
+        <label>Alter: <input type="number" name="alter" required></label><br><br>
+        <label>Geschlecht:
+            <select name="geschlecht" required>
+                <option value="w">Weiblich</option>
+                <option value="m">Männlich</option>
+                <option value="d">Divers</option>
+            </select>
+        </label><br><br>
+        <label>Grösse (cm): <input type="number" name="groesse_cm" step="0.1" required></label><br><br>
+        <label>Gewicht (kg): <input type="number" name="gewicht_kg" step="0.1" required></label><br><br>
+        <button type="submit">Speichern</button>
+    </form>
+    
+    </p>
+</body>
+</html>
