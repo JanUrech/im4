@@ -1,0 +1,212 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background-color: #4d4d4d;
+    color: white;
+}
+
+.app-container {
+    max-width: 480px;
+    margin: 0 auto;
+    min-height: 100vh;
+    position: relative;
+    border-left: 2px solid #333;
+    border-right: 2px solid #333;
+    background-color: #b8dce2;
+    overflow: hidden;
+}
+
+.view-container {
+    display: none;
+    width: 100%;
+    height: calc(100vh - 50px); /* Höhe abzüglich Navigation */
+    overflow-y: auto;
+}
+
+.active-view {
+    display: block;
+}
+
+.header {
+    background-color: #14363e;
+    color: white;
+    padding: 30px 20px;
+    text-align: center;
+    border-radius: 0 0 30px 30px;
+}
+
+.header h1 {
+    font-size: 32px;
+    margin-bottom: 10px;
+}
+
+.checkup-list {
+    padding: 20px;
+}
+
+.checkup-item {
+    background-color: #14363e;
+    border-radius: 50px 15px 50px 15px;
+    padding: 15px 25px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    color: white;
+    font-size: 20px;
+}
+
+.checkup-item .icon {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.checkup-details {
+    background-color: #14363e;
+    border-radius: 30px;
+    padding: 20px;
+    margin-bottom: 20px;
+    color: white;
+}
+
+.checkup-details h3 {
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.form-control {
+    width: 100%;
+    padding: 15px;
+    border-radius: 30px;
+    border: none;
+    background-color: white;
+    color: black;
+    font-size: 16px;
+    text-align: center;
+}
+
+.nav-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    /* background-color: #14363e; */
+    max-width: 480px;
+    margin: 0 auto;
+}
+
+.nav-item {
+    flex: 1;
+    border-radius: 50px 15px 50px 15px;
+    padding: 30px 0;
+    box-shadow: inset -3px -3px 10px #000000;
+    /* box-shadow: inset 3px 3px 10px #ffffff; */
+    background-color: #1a4a55;
+    text-align: center;
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.nav-item.active {
+    background-color: #1a4a55;
+}
+
+/* Für die Checkmark bei ausgeklapptem Bereich */
+.checkup-item.active .icon {
+    transform: rotate(90deg);
+}
+
+.checkup-item.completed .icon {
+    content: "✓";
+}
+
+/* Profile Styles */
+.profile-header {
+    background-color: #14363e;
+    color: white;
+    padding: 30px 20px;
+    text-align: center;
+    border-radius: 0 0 30px 30px;
+}
+
+.profile-content {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #b8dce2;
+    color: #14363e;
+    min-height: calc(100% - 212px); /* Für die Größe des Inhaltsbereichs */
+}
+
+.avatar-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.avatar {
+    width: 120px;
+    height: 250px;
+    background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 250"><path d="M60,20 C70,20 80,30 80,50 C80,65 75,75 65,85 L65,120 C65,130 80,135 80,150 L80,220 C80,235 70,245 60,245 C50,245 40,235 40,220 L40,150 C40,135 55,130 55,120 L55,85 C45,75 40,65 40,50 C40,30 50,20 60,20 Z" fill="%23cccccc" stroke="%23999999" stroke-width="2"/></svg>');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.profile-info {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    padding-right: 20px;
+}
+
+.info-pill {
+    background-color: #14363e;
+    color: white;
+    padding: 15px 30px;
+    border-radius: 50px 15px 50px 15px;
+    margin-bottom: 15px;
+    width: 60%;
+    text-align: center;
+    font-size: 18px;
+}
+
+.profile-actions {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px;
+    background-color: #14363e;
+    border-radius: 30px 30px 0 0;
+}
+
+.action-button {
+    padding: 15px 30px;
+    border-radius: 30px;
+    background-color: #14363e;
+    color: white;
+    text-align: center;
+    font-size: 18px;
+    cursor: pointer;
+    width: 48%;
+}

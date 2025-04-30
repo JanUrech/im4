@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medizinische Untersuchungen</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Checkups View -->
+        <div id="checkupsView" class="view-container active-view">
+            <div class="header">
+                <h1>Anstehende<br>Untersuchungen</h1>
+            </div>
+
+            <div class="checkup-list" id="checkupList">
+                <!-- Die Untersuchungen werden dynamisch via JavaScript hinzugefügt -->
+            </div>
+        </div>
+
+        <!-- Profile View -->
+        <div id="profileView" class="view-container">
+            <div class="profile-header">
+                <h1>Profil</h1>
+            </div>
+            
+            <div class="profile-content">
+                <div class="avatar-container">
+                    <div class="avatar"></div>
+                </div>
+                
+                <div class="profile-info">
+                    <div class="info-pill" id="genderPill">Männlich</div>
+                    <div class="info-pill" id="agePill">45 Jahre</div>
+                    <div class="info-pill" id="heightPill">1.75 m</div>
+                    <div class="info-pill" id="weightPill">83 KG</div>
+                </div>
+            </div>
+            
+            <div class="profile-actions">
+                <div class="action-button" onclick="switchView('checkups')">Untersuchungen</div>
+                <div class="action-button" id="editProfileBtn">Ändern</div>
+            </div>
+        </div>
+
+        <div class="nav-bar">
+            <div class="nav-item" onclick="switchView('profile')">Profil</div>
+            <div class="nav-item active" onclick="switchView('checkups')">Untersuchungen</div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
