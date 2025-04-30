@@ -6,8 +6,10 @@
 }
 
 body {
-    background-color: #4d4d4d;
+    background-color: #C2E6ED;
     color: white;
+    align-items: center;
+    justify-content: center;
 }
 
 .app-container {
@@ -209,4 +211,14 @@ body {
     font-size: 18px;
     cursor: pointer;
     width: 48%;
+}
+
+.kachel {
+    background-color: #07323B;
+    border-radius: 30px;
+    padding: 20px;
+    margin-bottom: 20px;
+    color: white;
+    text-align: center;
+    max-width: 350px;
 }
