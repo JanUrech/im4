@@ -1,26 +1,17 @@
 <?php
-// Verbindung zur Datenbank
-$servername = "mw2lgm.myd.infomaniak.com";
-$username = "mw2lgm_im4";
-$password = "K$.C?7X#uYr66tr";
-$dbname = "mw2lgm_im4";
-
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Verbindung prüfen
-if ($conn->connect_error) {
-    die("Verbindung fehlgeschlagen: " . $conn->connect_error);
-}
+// Verbindung zur Datenbank über PDO laden
+require_once __DIR__ . '/../system/config.php';
 
 // Wenn das Formular abgeschickt wurde
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $vorname = $_POST["vorname"];
-    $nachname = $_POST["nachname"];
-    $password = $_POST["password"];
-    $alter = $_POST["alter"];
-    $geschlecht = $_POST["geschlecht"];
-    $groesse_cm = $_POST["groesse_cm"];
-    $gewicht_kg = $_POST["gewicht_kg"];
+    // Eingaben aus dem Formular
+    $vorname     = $_POST["vorname"];
+    $nachname    = $_POST["nachname"];
+    $password    = $_POST["password"];
+    $alter_jahre       = $_POST["alter_jahre"];
+    $geschlecht  = $_POST["geschlecht"];
+    $groesse_cm  = $_POST["groesse_cm"];
+    $gewicht_kg  = $_POST["gewicht_kg"];
 
     // BMI berechnen
     if ($groesse_cm > 0) {
@@ -29,18 +20,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $bmi = null;
     }
 
-    // SQL-Insert mit korrekten Platzhaltern und Variablen
-    $stmt = $conn->prepare("INSERT INTO nutzer (`vorname`, `nachname`, `password`, `alter`, `geschlecht`, `groesse_cm`, `gewicht_kg`, `BMI`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-    $stmt->bind_param("sssisdid", $vorname, $nachname, $password, $alter, $geschlecht, $groesse_cm, $gewicht_kg, $bmi);
+    // SQL vorbereiten
+    $sql = "INSERT INTO nutzer (vorname, nachname, password, alter_jahre, geschlecht, groesse_cm, gewicht_kg, BMI)
+            VALUES (:vorname, :nachname, :password, :alter_jahre, :geschlecht, :groesse_cm, :gewicht_kg, :bmi)";
 
-    if ($stmt->execute()) {
+    try {
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([
+            ':vorname'     => $vorname,
+            ':nachname'    => $nachname,
+            ':password'    => $password,
+            ':alter_jahre'       => $alter_jahre,
+            ':geschlecht'  => $geschlecht,
+            ':groesse_cm'  => $groesse_cm,
+            ':gewicht_kg'  => $gewicht_kg,
+            ':bmi'         => $bmi
+        ]);
         echo "<p>✅ Nutzer erfolgreich gespeichert. BMI: $bmi</p>";
-    } else {
-        echo "<p>❌ Fehler: " . $stmt->error . "</p>";
+    } catch (PDOException $e) {
+        echo "<p>❌ Fehler beim Speichern: " . $e->getMessage() . "</p>";
     }
-
-    $stmt->close();
 }
-
-$conn->close();
 ?>
