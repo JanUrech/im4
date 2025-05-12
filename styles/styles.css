@@ -1,0 +1,468 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background-color: #4d4d4d;
+    color: white;
+}
+
+.app-container {
+    max-width: 480px;
+    margin: 0 auto;
+    min-height: 100vh;
+    position: relative;
+    border-left: 2px solid #333;
+    border-right: 2px solid #333;
+    background-color: #EBF7F9;
+    overflow: hidden;
+}
+
+.view-container {
+    display: none;
+    width: 100%;
+    height: calc(100vh - 80px); /* Angepasst für neue Nav-Bar Höhe */
+    overflow-y: auto;
+}
+
+.active-view {
+    display: block;
+}
+
+.header {
+    background-color: #14363e;
+    color: white;
+    padding: 30px 20px;
+    text-align: center;
+    border-radius: 0 0 30px 30px;
+}
+
+.header h1 {
+    font-size: 32px;
+    margin-bottom: 10px;
+}
+
+.checkup-list {
+    padding: 20px;
+}
+
+.checkup-item {
+    background-color: #14363e;
+    border-radius: 50px 15px 50px 15px;
+    padding: 15px 25px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    color: white;
+    font-size: 20px;
+}
+
+.checkup-item .icon {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.checkup-details {
+    background-color: #14363e;
+    border-radius: 30px;
+    padding: 20px;
+    margin-bottom: 20px;
+    color: white;
+}
+
+.checkup-details h3 {
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.form-control {
+    width: 100%;
+    padding: 15px;
+    border-radius: 30px;
+    border: none;
+    background-color: white;
+    color: black;
+    font-size: 16px;
+    text-align: center;
+}
+
+.nav-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    max-width: 480px;
+    margin: 0 auto;
+    height: 80px;
+    background-color: #14363e;
+}
+
+.nav-item {
+    position: absolute;
+    top: 0;
+    height: 80px;
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+.nav-item:first-child {
+    left: 0;
+    right: 50%;
+    background-color: #14363e;
+    border-radius: 0 80px 0 0;
+}
+
+.nav-item:last-child {
+    left: 50%;
+    right: 0;
+    background-color: #14363e;
+    border-radius: 80px 0 0 0;
+}
+
+.nav-item.active {
+    background-color: #1a4a55;
+}
+
+/* Remove old nav styles */
+.nav-item:first-child.active {
+    background-color: #1a4a55;
+    border-radius: 0 80px 0 0;
+}
+
+.nav-item:last-child.active {
+    background-color: #1a4a55;
+    border-radius: 80px 0 0 0;
+}
+
+/* Three-button navigation layout */
+.nav-bar.three-buttons {
+    display: flex;
+}
+
+.nav-bar.three-buttons .nav-item {
+    position: relative;
+    flex: 1;
+    border-radius: 0;
+}
+
+.nav-bar.three-buttons .nav-item:first-child {
+    border-radius: 30px 0 0 0;
+}
+
+.nav-bar.three-buttons .nav-item:last-child {
+    border-radius: 0 30px 0 0;
+}
+
+/* Für die Checkmark bei ausgeklapptem Bereich */
+.checkup-item.active .icon {
+    transform: rotate(90deg);
+}
+
+.checkup-item.completed .icon {
+    content: "✓";
+}
+
+/* Profile Styles */
+.profile-header {
+    background-color: #14363e;
+    color: white;
+    padding: 30px 20px;
+    text-align: center;
+    border-radius: 0 0 30px 30px;
+}
+
+.profile-content {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #EBF7F9;
+    color: #14363e;
+    min-height: calc(100% - 212px); /* Für die Größe des Inhaltsbereichs */
+}
+
+.avatar-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.avatar {
+    width: 120px;
+    height: 250px;
+    background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 250"><path d="M60,20 C70,20 80,30 80,50 C80,65 75,75 65,85 L65,120 C65,130 80,135 80,150 L80,220 C80,235 70,245 60,245 C50,245 40,235 40,220 L40,150 C40,135 55,130 55,120 L55,85 C45,75 40,65 40,50 C40,30 50,20 60,20 Z" fill="%23cccccc" stroke="%23999999" stroke-width="2"/></svg>');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.profile-info {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    padding-right: 20px;
+}
+
+.info-pill {
+    background-color: #14363e;
+    color: white;
+    padding: 15px 30px;
+    border-radius: 50px 15px 50px 15px;
+    margin-bottom: 15px;
+    width: 60%;
+    text-align: center;
+    font-size: 18px;
+}
+
+.profile-actions {
+    display: flex;
+    justify-content: center;
+    padding: 15px;
+    background-color: #14363e;
+    border-radius: 30px 30px 0 0;
+}
+
+.action-button {
+    padding: 15px 30px;
+    border-radius: 30px;
+    background-color: #14363e;
+    color: white;
+    text-align: center;
+    font-size: 18px;
+    cursor: pointer;
+    width: 48%;
+}
+
+/* Profile Edit Styles */
+.profile-edit-content {
+    padding: 20px;
+    background-color: #EBF7F9;
+    min-height: calc(100vh - 260px);
+}
+
+.edit-field {
+    margin-bottom: 20px;
+}
+
+.edit-field label {
+    display: block;
+    color: #14363e;
+    font-weight: bold;
+    margin-bottom: 10px;
+    font-size: 18px;
+}
+
+.gender-toggle {
+    background-color: #14363e;
+    border-radius: 50px;
+    padding: 5px;
+    display: flex;
+    position: relative;
+}
+
+.toggle-option {
+    flex: 1;
+    padding: 15px;
+    text-align: center;
+    color: white;
+    cursor: pointer;
+    border-radius: 45px;
+    transition: all 0.3s ease;
+}
+
+.toggle-option.active {
+    background-color: white;
+    color: #14363e;
+}
+
+.edit-input {
+    width: 100%;
+    padding: 15px;
+    border-radius: 50px;
+    border: none;
+    background-color: #14363e;
+    color: white;
+    font-size: 16px;
+    text-align: center;
+}
+
+.edit-input::placeholder {
+    color: #ccc;
+}
+
+.profile-edit-actions {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px;
+    background-color: #14363e;
+    border-radius: 30px 30px 0 0;
+}
+
+/* Untersuchungen Main Page Styles */
+.untersuchungen-main {
+    padding: 20px;
+    min-height: calc(100vh - 130px);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.untersuchungen-header {
+    background-color: #14363e;
+    color: white;
+    padding: 30px 20px;
+    text-align: center;
+    border-radius: 0 0 30px 30px;
+    margin-bottom: 20px;
+}
+
+.untersuchungen-button {
+    background-color: #14363e;
+    color: white;
+    padding: 45px 20px;
+    box-shadow: inset -20px -23px 20px -5px rgba(0, 0, 0, 0.5);
+    text-align: center;
+    border-radius: 15px;
+    margin-bottom: 20px;
+    font-size: 24px;
+    cursor: pointer;
+    border: none;
+    width: 100%;
+}
+
+/* Action buttons for moving examinations */
+.examination-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.action-btn {
+    background-color: #b8dce2;
+    color: #14363e;
+    border: none;
+    border-radius: 25px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    font-weight: bold;
+    flex: 1;
+    min-width: 120px;
+}
+
+.action-btn:hover {
+    background-color: #a0d0d6;
+}
+
+.action-btn.secondary {
+    background-color: #ffffff;
+    color: #14363e;
+}
+
+.action-btn.secondary:hover {
+    background-color: #e6e6e6;
+}
+
+/* Authentication Styles */
+.auth-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+    background-color: #EBF7F9;
+}
+
+.auth-title {
+    color: #14363e;
+    font-size: 28px;
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+.auth-form {
+    width: 100%;
+    max-width: 350px;
+}
+
+.input-group {
+    margin-bottom: 20px;
+}
+
+.input-group label {
+    display: block;
+    color: #14363e;
+    margin-bottom: 10px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.auth-input {
+    width: 100%;
+    padding: 15px;
+    border-radius: 25px;
+    border: none;
+    background-color: #14363e;
+    color: white;
+    font-size: 16px;
+    outline: none;
+}
+
+.auth-input::placeholder {
+    color: #ccc;
+}
+
+.auth-button {
+    width: 100%;
+    padding: 15px;
+    border-radius: 25px;
+    border: none;
+    background-color: #14363e;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+.auth-switch {
+    text-align: center;
+    margin-top: 30px;
+}
+
+.auth-switch p {
+    color: #14363e;
+    font-size: 16px;
+}
+
+.switch-link {
+    color: #14363e;
+    text-decoration: underline;
+    cursor: pointer;
+    font-weight: bold;
+}
