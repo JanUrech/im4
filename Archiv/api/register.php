@@ -1,8 +1,13 @@
 <?php
+
+require_once '../system/config.php'; // Konfiguration einbinden
+
 // Diese drei Header beheben in der Regel CORS-Probleme
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
+
+
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     // Preflight-Anfrage: Nur Header zurückgeben, keine Daten
@@ -26,22 +31,35 @@ $data = json_decode($input, true);
 
 // Prüfen, ob Daten korrekt angekommen sind
 if (is_array($data)) {
+  
     $firstname = htmlspecialchars($data['firstname'] ?? '');
-    $lastname = htmlspecialchars($data['lastname'] ?? '');
-    $email = htmlspecialchars($data['email'] ?? '');
+$lastname = htmlspecialchars($data['lastname'] ?? '');
+$email = htmlspecialchars($data['email'] ?? '');
 
-    // Rückgabe als sauberes JSON
+try {
+    // Bereite die SQL-Anweisung vor
+    $stmt = $pdo->prepare("INSERT INTO users (firstname, lastname, email) VALUES (:firstname, :lastname, :email)");
+
+    // Führe sie mit den Parametern aus
+    $stmt->execute([
+        ':firstname' => $firstname,
+        ':lastname' => $lastname,
+        ':email' => $email
+    ]);
+
     echo json_encode([
         "status" => "success",
-        "message" => "Daten empfangen",
+        "message" => "Daten erfolgreich gespeichert",
         "firstname" => $firstname,
         "lastname" => $lastname,
         "email" => $email
     ]);
-} else {
+} catch (PDOException $e) {
     echo json_encode([
         "status" => "error",
-        "message" => "Ungültige JSON-Daten empfangen"
+        "message" => "Fehler beim Speichern: " . $e->getMessage()
     ]);
+}
+
 }
 ?>
