@@ -314,7 +314,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Authentication event listeners
     document.getElementById('registration-form').addEventListener('submit', function(e) {
-        e.preventDefault();
+        // e.preventDefault();
         const vorname = document.querySelector('input[name="vorname"]').value;
         const nachname = document.querySelector('input[name="nachname"]').value;
         const password = document.querySelector('input[name="password"]').value;

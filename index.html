@@ -12,7 +12,7 @@
         <div class="view-container" id="registration-view">
             <div class="auth-container">
                 <h2 class="auth-title">Nutzer erfassen</h2>
-                <form class="auth-form" id="registration-form" method="post" action="php/BMI Calculator.php">
+                <form class="auth-form" id="registration-form" method="post" action="php/nutzerErfassung.php">
                     <div class="input-group">
                         <label>Vorname</label>
                         <input type="text" name="vorname" class="auth-input" required>
@@ -22,12 +22,16 @@
                         <input type="text" name="nachname" class="auth-input" required>
                     </div>
                     <div class="input-group">
+                        <label>E-Mail</label>
+                        <input type="text" name="email" class="auth-input" required>
+                    </div>
+                    <div class="input-group">
                         <label>Passwort</label>
                         <input type="password" name="password" class="auth-input" required>
                     </div>
                     <div class="input-group">
                         <label>Alter</label>
-                        <input type="number" name="alter" class="auth-input" required>
+                        <input type="number" name="alter_jahre" class="auth-input" required>
                     </div>
                     <div class="input-group">
                         <label>Geschlecht</label>
@@ -195,6 +199,6 @@
         </div>
     </div>
 
-    <script src="app.js"></script>
+    <script src="app.js"></script>  
 </body>
 </html>
