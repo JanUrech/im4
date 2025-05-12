@@ -1,31 +1,200 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="Test design/styles.css">
-    <title>Document</title>
+    <title>Health App</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-        <article class="kachel">
-        <h2>Nutzer erfassen</h2>
-        <form method="post" action="php/nutzerErfassung.php">
-            <label>Vorname: <input type="text" name="vorname" required></label><br><br>
-            <label>Nachname: <input type="text" name="nachname" required></label><br><br>
-            <label>E-Mail: <input type="email" name="email" required></label><br><br>
-            <label>Passwort: <input type="password" name="password" required></label><br><br>
-            <label>Alter: <input type="number" name="alter_jahre" required></label><br><br>
-            <label>Geschlecht:
-                <select name="geschlecht" required>
-                    <option value="w">Weiblich</option>
-                    <option value="m">Männlich</option>
-                    <option value="d">Divers</option>
-                </select>
-            </label><br><br>
-            <label>Grösse (cm): <input type="number" name="groesse_cm" step="0.1" required></label><br><br>
-            <label>Gewicht (kg): <input type="number" name="gewicht_kg" step="0.1" required></label><br><br>
-            <button type="submit">Speichern</button>
-        </form>
-    </article>
+    <div class="app-container">
+        <!-- Registration View -->
+        <div class="view-container" id="registration-view">
+            <div class="auth-container">
+                <h2 class="auth-title">Nutzer erfassen</h2>
+                <form class="auth-form" id="registration-form" method="post" action="php/BMI Calculator.php">
+                    <div class="input-group">
+                        <label>Vorname</label>
+                        <input type="text" name="vorname" class="auth-input" required>
+                    </div>
+                    <div class="input-group">
+                        <label>Nachname</label>
+                        <input type="text" name="nachname" class="auth-input" required>
+                    </div>
+                    <div class="input-group">
+                        <label>Passwort</label>
+                        <input type="password" name="password" class="auth-input" required>
+                    </div>
+                    <div class="input-group">
+                        <label>Alter</label>
+                        <input type="number" name="alter" class="auth-input" required>
+                    </div>
+                    <div class="input-group">
+                        <label>Geschlecht</label>
+                        <select name="geschlecht" class="auth-input auth-select" required>
+                            <option value="">Bitte wählen</option>
+                            <option value="w">Weiblich</option>
+                            <option value="m">Männlich</option>
+                            <option value="d">Divers</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>Grösse (cm)</label>
+                        <input type="number" name="groesse_cm" class="auth-input" step="0.1" required>
+                    </div>
+                    <div class="input-group">
+                        <label>Gewicht (kg)</label>
+                        <input type="number" name="gewicht_kg" class="auth-input" step="0.1" required>
+                    </div>
+                    <button type="submit" class="auth-button">Speichern</button>
+                </form>
+                <div class="auth-switch">
+                    <p>Bereits registriert? <span class="switch-link" id="to-login">Einloggen</span></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Login View -->
+        <div class="view-container" id="login-view">
+            <div class="auth-container">
+                <h2 class="auth-title">Login</h2>
+                <form class="auth-form" id="login-form">
+                    <div class="input-group">
+                        <label>Vorname</label>
+                        <input type="text" name="vorname" class="auth-input" required>
+                    </div>
+                    <div class="input-group">
+                        <label>Nachname</label>
+                        <input type="text" name="nachname" class="auth-input" required>
+                    </div>
+                    <button type="submit" class="auth-button">Einloggen</button>
+                </form>
+                <div class="auth-switch">
+                    <p>Noch kein Konto? <span class="switch-link" id="to-register">Registrieren</span></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Profile View -->
+        <div class="view-container" id="profile-view">
+            <div class="profile-header">
+                <h1>Mein Profil</h1>
+            </div>
+            <div class="profile-content">
+                <div class="avatar-container">
+                    <div class="avatar"></div>
+                </div>
+                <div class="profile-info">
+                    <div class="info-pill">35 Jahre</div>
+                    <div class="info-pill">75kg</div>
+                    <div class="info-pill">176cm</div>
+                </div>
+            </div>
+            <div class="profile-actions">
+                <div class="action-button" id="edit-profile-btn">Bearbeiten</div>
+            </div>
+        </div>
+
+        <!-- Profile Edit View -->
+        <div class="view-container" id="profile-edit-view">
+            <div class="header">
+                <h1>Profil ändern</h1>
+            </div>
+            <div class="profile-edit-content">
+                <div class="edit-field">
+                    <label>Geschlecht</label>
+                    <div class="gender-toggle">
+                        <span class="toggle-option active" data-value="männlich">Männlich</span>
+                        <span class="toggle-option" data-value="weiblich">Weiblich</span>
+                    </div>
+                </div>
+                <div class="edit-field">
+                    <label>Alter</label>
+                    <input type="number" class="edit-input" value="45" min="1" max="120">
+                </div>
+                <div class="edit-field">
+                    <label>Größe</label>
+                    <input type="text" class="edit-input" value="1.75" placeholder="z.B. 1.75">
+                </div>
+                <div class="edit-field">
+                    <label>Gewicht</label>
+                    <input type="text" class="edit-input" value="83" placeholder="z.B. 75">
+                </div>
+            </div>
+            <div class="profile-edit-actions">
+                <div class="action-button" id="back-btn">Rückgängig</div>
+                <div class="action-button" id="save-btn">Speichern</div>
+            </div>
+        </div>
+
+        <!-- Untersuchungen Main View -->
+        <div class="view-container" id="untersuchungen-main-view">
+            <div class="untersuchungen-header">
+                <h1>Untersuchungen Main Page</h1>
+            </div>
+            <div class="untersuchungen-main">
+                <button class="untersuchungen-button" id="btn-noetige">
+                    Nötige Untersuchungen
+                </button>
+                <button class="untersuchungen-button" id="btn-geplante">
+                    Geplante Untersuchungen
+                </button>
+                <button class="untersuchungen-button" id="btn-nicht-durchgefuehrte">
+                    Nicht durchgeführte Untersuchungen
+                </button>
+                <button class="untersuchungen-button" id="btn-erledigte">
+                    Erledigte Untersuchungen
+                </button>
+            </div>
+        </div>
+        
+        <!-- Nötige Untersuchungen View -->
+        <div class="view-container" id="noetige-view">
+            <div class="header">
+                <h1>Nötige Untersuchungen</h1>
+            </div>
+            <div class="checkup-list">
+                <!-- Items will be dynamically generated -->
+            </div>
+        </div>
+        
+        <!-- Geplante Untersuchungen View -->
+        <div class="view-container" id="geplante-view">
+            <div class="header">
+                <h1>Geplante Untersuchungen</h1>
+            </div>
+            <div class="checkup-list">
+                <!-- Items will be dynamically generated -->
+            </div>
+        </div>
+        
+        <!-- Nicht durchgeführte Untersuchungen View -->
+        <div class="view-container" id="nicht-durchgefuehrte-view">
+            <div class="header">
+                <h1>Nicht durchgeführte Untersuchungen</h1>
+            </div>
+            <div class="checkup-list">
+                <!-- Items will be dynamically generated -->
+            </div>
+        </div>
+        
+        <!-- Erledigte Untersuchungen View -->
+        <div class="view-container" id="erledigte-view">
+            <div class="header">
+                <h1>Erledigte Untersuchungen</h1>
+            </div>
+            <div class="checkup-list">
+                <!-- Items will be dynamically generated -->
+            </div>
+        </div>
+
+        <!-- Navigation Bar -->
+        <div class="nav-bar">
+            <div class="nav-item" data-view="profile-view">Profil</div>
+            <div class="nav-item active" data-view="untersuchungen-main-view">Untersuchungen</div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
 </body>
 </html>
