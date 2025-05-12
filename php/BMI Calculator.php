@@ -14,7 +14,8 @@ if ($conn->connect_error) {
 
 // Wenn das Formular abgeschickt wurde
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $name = $_POST["name"];
+    $vorname = $_POST["vorname"];
+    $nachname = $_POST["nachname"];
     $password = $_POST["password"];
     $alter = $_POST["alter"];
     $geschlecht = $_POST["geschlecht"];
@@ -28,9 +29,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $bmi = null;
     }
 
-    // SQL-Insert
-    $stmt = $conn->prepare("INSERT INTO nutzer (`name`, `password`, `alter`, geschlecht, groesse_cm, gewicht_kg, BMI) VALUES (?, ?, ?, ?, ?, ?, ?)");
-    $stmt->bind_param("ssisddi", $name, $password, $alter, $geschlecht, $groesse_cm, $gewicht_kg, $bmi);
+    // SQL-Insert mit korrekten Platzhaltern und Variablen
+    $stmt = $conn->prepare("INSERT INTO nutzer (`vorname`, `nachname`, `password`, `alter`, `geschlecht`, `groesse_cm`, `gewicht_kg`, `BMI`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+    $stmt->bind_param("sssisdid", $vorname, $nachname, $password, $alter, $geschlecht, $groesse_cm, $gewicht_kg, $bmi);
 
     if ($stmt->execute()) {
         echo "<p>✅ Nutzer erfolgreich gespeichert. BMI: $bmi</p>";
