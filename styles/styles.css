@@ -141,6 +141,7 @@ body {
 
 .nav-item.active {
     background-color: #1a4a55;
+    box-shadow: inset -20px -23px 12px -5px rgba(0, 0, 0, 0.2), inset 19px 27px 12px 0px rgba(107, 107, 107, 0.25);
 }
 
 /* Remove old nav styles */
@@ -286,6 +287,7 @@ body {
     flex: 1;
     padding: 15px;
     text-align: center;
+    box-shadow: inset -20px -23px 12px -5px rgba(0, 0, 0, 0.2), inset 19px 27px 12px 0px rgba(107, 107, 107, 0.25);
     color: white;
     cursor: pointer;
     border-radius: 45px;
@@ -301,6 +303,7 @@ body {
     width: 100%;
     padding: 15px;
     border-radius: 50px;
+    box-shadow: inset -20px -23px 12px -5px rgba(0, 0, 0, 0.2), inset 19px 27px 12px 0px rgba(107, 107, 107, 0.25);
     border: none;
     background-color: #14363e;
     color: white;
@@ -342,7 +345,7 @@ body {
     background-color: #14363e;
     color: white;
     padding: 45px 20px;
-    box-shadow: inset -20px -23px 20px -5px rgba(0, 0, 0, 0.5);
+    box-shadow: inset -20px -23px 12px -5px rgba(0, 0, 0, 0.2), inset 19px 27px 12px 0px rgba(107, 107, 107, 0.25);
     text-align: center;
     border-radius: 15px;
     margin-bottom: 20px;
@@ -365,6 +368,7 @@ body {
     background-color: #b8dce2;
     color: #14363e;
     border: none;
+    box-shadow: inset -20px -23px 12px -5px rgba(0, 0, 0, 0.2), inset 19px 27px 12px 0px rgba(107, 107, 107, 0.25);
     border-radius: 25px;
     padding: 10px 20px;
     font-size: 16px;
@@ -426,6 +430,7 @@ body {
     width: 100%;
     padding: 15px;
     border-radius: 25px;
+    box-shadow: inset -20px -23px 12px -5px rgba(0, 0, 0, 0.2), inset 19px 27px 12px 0px rgba(107, 107, 107, 0.25);
     border: none;
     background-color: #14363e;
     color: white;
@@ -437,11 +442,28 @@ body {
     color: #ccc;
 }
 
+.auth-select {
+    width: 100%;
+    padding: 15px;
+    border-radius: 25px;
+    border: none;
+    background-color: #14363e;
+    color: white;
+    font-size: 16px;
+    outline: none;
+}
+
+.auth-select option {
+    background-color: #14363e;
+    color: white;
+}
+
 .auth-button {
     width: 100%;
     padding: 15px;
     border-radius: 25px;
     border: none;
+    box-shadow: inset -20px -23px 12px -5px rgba(0, 0, 0, 0.2), inset 19px 27px 12px 0px rgba(107, 107, 107, 0.25);
     background-color: #14363e;
     color: white;
     font-size: 18px;
