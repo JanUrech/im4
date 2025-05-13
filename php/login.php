@@ -1,5 +1,5 @@
 <?php
-
+session_destroy();
 require_once __DIR__ . '/../system/config.php';
 header('Content-Type: text/plain; charset=UTF-8');
 

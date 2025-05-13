@@ -33,11 +33,11 @@ document.getElementById("register-form").addEventListener("submit", async (e) =>
 
     const reply = await res.text();
     console.log("Antwort vom Server:\n" + reply);
-    alert(reply);
+   // alert(reply);
 
     if (reply.includes("✅")) {
       // Nach erfolgreicher Registrierung ggf. weiterleiten
-      window.location.href = "protected.html";
+    //  window.location.href = "protected.html";
         
 
     }
