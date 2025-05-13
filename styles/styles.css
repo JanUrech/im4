@@ -282,7 +282,7 @@ body {
 
 /* Original Mobile Styles werden beibehalten */
 .view-container {
-    display: none;
+    display: flex;
     width: 100%;
     height: calc(100vh - 80px);
     overflow-y: auto;
