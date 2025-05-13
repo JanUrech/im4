@@ -3,8 +3,25 @@
 require_once __DIR__ . '/../system/config.php';
 header('Content-Type: text/plain; charset=UTF-8');
 
-$loginInfo = $_POST['loginInfo'] ?? '';
+// Eingaben sichern
+$email = $_POST['email'] ?? '';
 $password = $_POST['password'] ?? '';
 
-echo "habe die Daten: $loginInfo und $password";
+// Frühzeitige Prüfung
+if (empty($email) || empty($password)) {
+    echo "E-Mail und Passwort müssen ausgefüllt sein.";
+    exit;
+}
+
+// Nutzer anhand der E-Mail abrufen
+$stmt = $pdo->prepare("SELECT * FROM nutzer WHERE email = :email");
+$stmt->execute([':email' => $email]);
+$user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+// Prüfung auf Existenz und Passwort
+if ($user && password_verify($password, $user['password'])) {
+    echo "Login erfolgreich. Willkommen, " . htmlspecialchars($user['email']) . "!";
+} else {
+    echo "Login fehlgeschlagen. E-Mail oder Passwort ist falsch.";
+}
 ?>

@@ -351,23 +351,24 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    document.getElementById('login-form').addEventListener('submit', function(e) {
-        e.preventDefault();
-        const vorname = document.querySelector('input[name="vorname"]').value;
-        const nachname = document.querySelector('input[name="nachname"]').value;
+    // Login form submission
+    // document.getElementById('login-form').addEventListener('submit', function(e) {
+    //     e.preventDefault();
+    //     const vorname = document.querySelector('input[name="vorname"]').value;
+    //     const nachname = document.querySelector('input[name="nachname"]').value;
         
-        // Simple validation - check if user exists and credentials match
-        if (vorname && nachname) {
-            // Basic check if user has registered
-            if (userData.vorname === vorname && userData.nachname === nachname) {
-                showAuthenticatedApp();
-            } else {
-                alert('Ungültige Anmeldedaten. Bitte überprüfen Sie Ihre Eingaben oder registrieren Sie sich.');
-            }
-        } else {
-            alert('Bitte füllen Sie alle Felder aus');
-        }
-    });
+    //     // Simple validation - check if user exists and credentials match
+    //     if (vorname && nachname) {
+    //         // Basic check if user has registered
+    //         if (userData.vorname === vorname && userData.nachname === nachname) {
+    //             showAuthenticatedApp();
+    //         } else {
+    //             alert('Ungültige Anmeldedaten. Bitte überprüfen Sie Ihre Eingaben oder registrieren Sie sich.');
+    //         }
+    //     } else {
+    //         alert('Bitte füllen Sie alle Felder aus');
+    //     }
+    // });
 
     document.getElementById('to-login').addEventListener('click', showLogin);
     document.getElementById('to-register').addEventListener('click', showRegistration);
