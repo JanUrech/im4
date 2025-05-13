@@ -1,33 +1,64 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Health App</title>
+    <title>Health App - Registrierung</title>
     <link rel="stylesheet" href="styles/styles.css">
     <link rel="icon" href="Images/favicon.png" type="image/png">
 </head>
 <body>
-            <div class="view-container" id="login-view">
+    <div class="app-container">
+        <div class="view-container active-view">
             <div class="auth-container">
-                <h2 class="auth-title">Login</h2>
-                <form class="auth-form" id="login-form">
+                <h2 class="auth-title">Nutzer erfassen</h2>
+                <form class="auth-form" id="registration-form" method="post" action="php/nutzerErfassung.php">
+                    <div class="input-group">
+                        <label>Vorname</label>
+                        <input type="text" name="vorname" class="auth-input" required>
+                    </div>
+                    <div class="input-group">
+                        <label>Nachname</label>
+                        <input type="text" name="nachname" class="auth-input" required>
+                    </div>
                     <div class="input-group">
                         <label>E-Mail</label>
-                        <input type="text" name="email" class="auth-input" id="user-email" required>
+                        <input type="text" name="email" class="auth-input" required>
                     </div>
                     <div class="input-group">
                         <label>Passwort</label>
-                        <input type="password" name="password" class="auth-input" id="user-password" required>
+                        <input type="password" name="password" class="auth-input" required>
                     </div>
-                    <button type="submit" class="auth-button">Einloggen</button>
+                    <div class="input-group">
+                        <label>Alter</label>
+                        <input type="number" name="alter_jahre" class="auth-input" required>
+                    </div>
+                    <div class="input-group">
+                        <label>Geschlecht</label>
+                        <select name="geschlecht" class="auth-input auth-select" required>
+                            <option value="">Bitte wählen</option>
+                            <option value="w">Weiblich</option>
+                            <option value="m">Männlich</option>
+                            <option value="d">Divers</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>Grösse (cm)</label>
+                        <input type="number" name="groesse_cm" class="auth-input" step="0.1" required>
+                    </div>
+                    <div class="input-group">
+                        <label>Gewicht (kg)</label>
+                        <input type="number" name="gewicht_kg" class="auth-input" step="0.1" required>
+                    </div>
+                    <button type="submit" class="auth-button">Speichern</button>
                 </form>
                 <div class="auth-switch">
-                    <p>Noch kein Konto? <span class="switch-link" id="to-register">Registrieren</span></p>
+                    <p>Bereits registriert? <span class="switch-link" id="to-login">Einloggen</span></p>
                 </div>
             </div>
         </div>
-        <script src="JS/login.js"></script>
-    <script src="JS/app.js"> </script>
+    </div>
+
+    <script src="JS/app.js"></script>
 </body>
 </html>

@@ -1,13 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Health App - Untersuchungen</title>
+    <link rel="stylesheet" href="styles/styles.css">
+    <link rel="icon" href="Images/favicon.png" type="image/png">
 </head>
 <body>
-            <!-- Untersuchungen Main View -->
-        <div class="view-container" id="untersuchungen-main-view">
+    <div class="app-container">
+        <div class="view-container active-view">
             <div class="untersuchungen-header">
                 <h1>Untersuchungen Main Page</h1>
             </div>
@@ -26,6 +28,14 @@
                 </button>
             </div>
         </div>
-        <script src="JS/protected.js"></script>
+        
+        <!-- Navigation Bar -->
+        <div class="nav-bar">
+            <div class="nav-item" data-view="profil">Profil</div>
+            <div class="nav-item active" data-view="untersuchungen">Untersuchungen</div>
+        </div>
+    </div>
+
+    <script src="JS/app.js"></script>
 </body>
 </html>

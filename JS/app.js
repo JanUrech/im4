@@ -1,84 +1,253 @@
-// App state management - using simple variables instead of localStorage
-let isAuthenticated = false;
-let userData = {
-    username: '',
-    email: ''
-};
-
-// Navigation
-document.querySelectorAll('.nav-item').forEach(item => {
-    item.addEventListener('click', function() {
-        // Remove active class from all nav items
-        document.querySelectorAll('.nav-item').forEach(navItem => {
-            navItem.classList.remove('active');
-        });
-        
-        // Add active class to clicked nav item
-        this.classList.add('active');
-        
-        // Hide all view containers
-        document.querySelectorAll('.view-container').forEach(view => {
-            view.classList.remove('active-view');
-        });
-        
-        // Show the selected view container
-        const viewId = this.getAttribute('data-view');
-        document.getElementById(viewId).classList.add('active-view');
-    });
-});
-
-// Untersuchungen buttons navigation
-document.getElementById('btn-noetige').addEventListener('click', function() {
-    showView('noetige-view');
-});
-
-document.getElementById('btn-geplante').addEventListener('click', function() {
-    showView('geplante-view');
-});
-
-document.getElementById('btn-nicht-durchgefuehrte').addEventListener('click', function() {
-    showView('nicht-durchgefuehrte-view');
-});
-
-document.getElementById('btn-erledigte').addEventListener('click', function() {
-    showView('erledigte-view');
-});
-
-function showView(viewId) {
-    // Hide all view containers
-    document.querySelectorAll('.view-container').forEach(view => {
-        view.classList.remove('active-view');
-    });
+// Single JS file for all pages
+document.addEventListener('DOMContentLoaded', function() {
+    // Get current page
+    const currentPage = getCurrentPage();
     
-    // Show the selected view container
-    document.getElementById(viewId).classList.add('active-view');
+    // Initialize based on current page
+    switch(currentPage) {
+        case 'index':
+            initializeRegistration();
+            break;
+        case 'login':
+            initializeLogin();
+            break;
+        case 'untersuchungen':
+            loadPage();
+            initializeUntersuchungen();
+            break;
+        case 'noetige':
+        case 'geplante':
+        case 'nicht-durchgefuehrte':
+        case 'erledigte':
+            loadPage();
+            initializeExaminationList();
+            break;
+        case 'profil':
+            loadPage();
+            initializeProfile();
+            break;
+        case 'profil-bearbeiten':
+            loadPage();
+            initializeProfileEdit();
+            break;
+    }
+});
+
+// Get current page name from URL
+function getCurrentPage() {
+    const path = window.location.pathname;
+    const page = path.substring(path.lastIndexOf('/') + 1);
+    return page.split('.')[0] || 'index';
+}
+
+// Common functionality
+let isAuthenticated = JSON.parse(localStorage.getItem('isAuthenticated') || 'false');
+let userData = JSON.parse(localStorage.getItem('userData') || '{}');
+
+function checkAuth() {
+    if (!isAuthenticated) {
+        window.location.href = 'index.html';
+        return false;
+    }
+    return true;
+}
+
+function saveAuth(authenticated) {
+    isAuthenticated = authenticated;
+    localStorage.setItem('isAuthenticated', JSON.stringify(authenticated));
+}
+
+function saveUserData(data) {
+    userData = data;
+    localStorage.setItem('userData', JSON.stringify(data));
+}
+
+function navigateTo(page) {
+    switch(page) {
+        case 'profil':
+            window.location.href = 'profil.html';
+            break;
+        case 'untersuchungen':
+            window.location.href = 'untersuchungen.html';
+            break;
+        case 'noetige':
+            window.location.href = 'noetige.html';
+            break;
+        case 'geplante':
+            window.location.href = 'geplante.html';
+            break;
+        case 'nicht-durchgefuehrte':
+            window.location.href = 'nicht-durchgefuehrte.html';
+            break;
+        case 'erledigte':
+            window.location.href = 'erledigte.html';
+            break;
+    }
+}
+
+function initializeNavigation() {
+    const navItems = document.querySelectorAll('.nav-item');
+    navItems.forEach(item => {
+        item.addEventListener('click', function() {
+            const view = this.getAttribute('data-view');
+            navigateTo(view);
+        });
+    });
+}
+
+function loadPage() {
+    checkAuth();
+    initializeNavigation();
 }
 
 // Data storage for examinations
-let examinations = {
-    noetige: [
-        'Blutabnahme',
-        'Blutdruck',
-        'Gewicht'
-    ],
-    geplante: [
-        'Zahnarzt (15.06.2025)',
-        'Hautcheck (23.07.2025)'
-    ],
-    nichtDurchgefuehrte: [
-        'Augenarzt',
-        'Allergietest'
-    ],
-    erledigte: [
-        'Blutabnahme (03.03.2025)',
-        'Zahnarzt (10.01.2025)'
-    ]
-};
+let examinations = JSON.parse(localStorage.getItem('examinations') || JSON.stringify({
+    noetige: ['Blutabnahme', 'Blutdruck', 'Gewicht'],
+    geplante: ['Zahnarzt (15.06.2025)', 'Hautcheck (23.07.2025)'],
+    nichtDurchgefuehrte: ['Augenarzt', 'Allergietest'],
+    erledigte: ['Blutabnahme (03.03.2025)', 'Zahnarzt (10.01.2025)']
+}));
 
-// Function to render examinations in a view
-function renderExaminations(viewId, category) {
-    const view = document.getElementById(viewId);
-    const list = view.querySelector('.checkup-list');
+function saveExaminations() {
+    localStorage.setItem('examinations', JSON.stringify(examinations));
+}
+
+// Profile data management
+let profileData = JSON.parse(localStorage.getItem('profileData') || JSON.stringify({
+    gender: 'männlich',
+    age: 45,
+    height: '1.75',
+    weight: '83'
+}));
+
+function saveProfileData() {
+    localStorage.setItem('profileData', JSON.stringify(profileData));
+}
+
+// Registration page
+function initializeRegistration() {
+    const form = document.getElementById('registration-form');
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = {
+                vorname: document.querySelector('input[name="vorname"]').value,
+                nachname: document.querySelector('input[name="nachname"]').value,
+                email: document.querySelector('input[name="email"]').value,
+                password: document.querySelector('input[name="password"]').value,
+                alter: document.querySelector('input[name="alter_jahre"]').value,
+                geschlecht: document.querySelector('select[name="geschlecht"]').value,
+                groesse: document.querySelector('input[name="groesse_cm"]').value,
+                gewicht: document.querySelector('input[name="gewicht_kg"]').value
+            };
+            
+            if (Object.values(formData).every(value => value !== '')) {
+                saveUserData(formData);
+                
+                profileData = {
+                    age: formData.alter,
+                    height: (parseFloat(formData.groesse) / 100).toFixed(2),
+                    weight: formData.gewicht,
+                    gender: formData.geschlecht === 'm' ? 'männlich' : (formData.geschlecht === 'w' ? 'weiblich' : 'divers')
+                };
+                saveProfileData();
+                
+                alert('Registrierung erfolgreich! Sie werden jetzt zur Login-Seite weitergeleitet.');
+                window.location.href = 'login.html';
+            } else {
+                alert('Bitte füllen Sie alle Felder aus');
+            }
+        });
+    }
+
+    const toLogin = document.getElementById('to-login');
+    if (toLogin) {
+        toLogin.addEventListener('click', function() {
+            window.location.href = 'login.html';
+        });
+    }
+}
+
+// Login page
+function initializeLogin() {
+    const form = document.getElementById('login-form');
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.querySelector('#user-email').value;
+            const password = document.querySelector('#user-password').value;
+            
+            if (email && password) {
+                if (userData.email === email && userData.password === password) {
+                    saveAuth(true);
+                    window.location.href = 'untersuchungen.html';
+                } else {
+                    alert('Ungültige Anmeldedaten. Bitte überprüfen Sie Ihre Eingaben oder registrieren Sie sich.');
+                }
+            } else {
+                alert('Bitte füllen Sie alle Felder aus');
+            }
+        });
+    }
+
+    const toRegister = document.getElementById('to-register');
+    if (toRegister) {
+        toRegister.addEventListener('click', function() {
+            window.location.href = 'index.html';
+        });
+    }
+}
+
+// Untersuchungen main page
+function initializeUntersuchungen() {
+    document.getElementById('btn-noetige').addEventListener('click', function() {
+        navigateTo('noetige');
+    });
+
+    document.getElementById('btn-geplante').addEventListener('click', function() {
+        navigateTo('geplante');
+    });
+
+    document.getElementById('btn-nicht-durchgefuehrte').addEventListener('click', function() {
+        navigateTo('nicht-durchgefuehrte');
+    });
+
+    document.getElementById('btn-erledigte').addEventListener('click', function() {
+        navigateTo('erledigte');
+    });
+}
+
+// Examination list pages
+function initializeExaminationList() {
+    const currentPage = getCurrentPage();
+    let category, containerId;
+    
+    switch(currentPage) {
+        case 'noetige':
+            category = 'noetige';
+            containerId = 'noetige-list';
+            break;
+        case 'geplante':
+            category = 'geplante';
+            containerId = 'geplante-list';
+            break;
+        case 'nicht-durchgefuehrte':
+            category = 'nichtDurchgefuehrte';
+            containerId = 'nicht-durchgefuehrte-list';
+            break;
+        case 'erledigte':
+            category = 'erledigte';
+            containerId = 'erledigte-list';
+            break;
+    }
+    
+    renderExaminations(containerId, category);
+}
+
+function renderExaminations(containerId, category) {
+    const list = document.getElementById(containerId);
     list.innerHTML = '';
 
     examinations[category].forEach((examination, index) => {
@@ -95,17 +264,14 @@ function renderExaminations(viewId, category) {
             <span class="icon">${icon}</span>
         `;
         
-        // Add click event for expansion
         item.addEventListener('click', function(e) {
             if (e.target.classList.contains('action-btn')) return;
             
             this.classList.toggle('active');
             
-            // If there's already a details section after this item, remove it
             if (this.nextElementSibling && this.nextElementSibling.classList.contains('checkup-details')) {
                 this.nextElementSibling.remove();
             } else {
-                // Create and insert details section
                 const details = document.createElement('div');
                 details.className = 'checkup-details';
                 
@@ -177,16 +343,12 @@ function renderExaminations(viewId, category) {
     });
 }
 
-// Function to move examination between categories
-function moveExamination(fromCategory, index, toCategory) {
+window.moveExamination = function(fromCategory, index, toCategory) {
     const examination = examinations[fromCategory][index];
     
-    // Remove from source category
     examinations[fromCategory].splice(index, 1);
     
-    // Add to destination category
     if (toCategory === 'erledigte') {
-        // Add current date for completed examinations
         const today = new Date().toLocaleDateString('de-DE');
         const examName = examination.replace(/\s*\(\d{2}\.\d{2}\.\d{4}\)/g, '');
         examinations[toCategory].push(`${examName} (${today})`);
@@ -194,34 +356,73 @@ function moveExamination(fromCategory, index, toCategory) {
         examinations[toCategory].push(examination);
     }
     
-    // Re-render the views
-    renderExaminations('noetige-view', 'noetige');
-    renderExaminations('geplante-view', 'geplante');
-    renderExaminations('nicht-durchgefuehrte-view', 'nichtDurchgefuehrte');
-    renderExaminations('erledigte-view', 'erledigte');
+    saveExaminations();
+    
+    // Re-render current view
+    const currentPage = getCurrentPage();
+    initializeExaminationList();
 }
 
-// Profile data management
-let profileData = {
-    gender: 'männlich',
-    age: 45,
-    height: '1.75',
-    weight: '83'
-};
+// Profile page
+function initializeProfile() {
+    updateProfileDisplay();
+    
+    const editBtn = document.getElementById('edit-profile-btn');
+    if (editBtn) {
+        editBtn.addEventListener('click', function() {
+            window.location.href = 'profil-bearbeiten.html';
+        });
+    }
+}
 
-// Update profile info display
 function updateProfileDisplay() {
-    const profileInfo = document.querySelector('#profile-view .profile-info');
-    const genderText = profileData.gender === 'männlich' ? 'Männlich' : 'Weiblich';
-    profileInfo.innerHTML = `
-        <div class="info-pill">${genderText}</div>
-        <div class="info-pill">${profileData.age} Jahre</div>
-        <div class="info-pill">${profileData.height} m</div>
-        <div class="info-pill">${profileData.weight} KG</div>
-    `;
+    const profileInfo = document.querySelector('.profile-info');
+    if (profileInfo) {
+        const genderText = profileData.gender === 'männlich' ? 'Männlich' : 'Weiblich';
+        profileInfo.innerHTML = `
+            <div class="info-pill">${genderText}</div>
+            <div class="info-pill">${profileData.age} Jahre</div>
+            <div class="info-pill">${profileData.height} m</div>
+            <div class="info-pill">${profileData.weight} KG</div>
+        `;
+    }
 }
 
-// Populate profile edit form
+// Profile edit page
+function initializeProfileEdit() {
+    populateEditForm();
+    
+    document.querySelectorAll('.toggle-option').forEach(toggle => {
+        toggle.addEventListener('click', function() {
+            document.querySelectorAll('.toggle-option').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+        });
+    });
+    
+    const backBtn = document.getElementById('back-btn');
+    if (backBtn) {
+        backBtn.addEventListener('click', function() {
+            window.location.href = 'profil.html';
+        });
+    }
+    
+    const saveBtn = document.getElementById('save-btn');
+    if (saveBtn) {
+        saveBtn.addEventListener('click', function() {
+            const activeGender = document.querySelector('.toggle-option.active');
+            profileData.gender = activeGender.getAttribute('data-value');
+            
+            const inputs = document.querySelectorAll('.edit-input');
+            profileData.age = inputs[0].value;
+            profileData.height = inputs[1].value;
+            profileData.weight = inputs[2].value;
+            
+            saveProfileData();
+            window.location.href = 'profil.html';
+        });
+    }
+}
+
 function populateEditForm() {
     const genderToggles = document.querySelectorAll('.toggle-option');
     genderToggles.forEach(toggle => {
@@ -232,147 +433,9 @@ function populateEditForm() {
     });
 
     const inputs = document.querySelectorAll('.edit-input');
-    inputs[0].value = profileData.age;
-    inputs[1].value = profileData.height;
-    inputs[2].value = profileData.weight;
+    if (inputs.length >= 3) {
+        inputs[0].value = profileData.age;
+        inputs[1].value = profileData.height;
+        inputs[2].value = profileData.weight;
+    }
 }
-
-// Authentication functions
-function showAuthenticatedApp() {
-    isAuthenticated = true;
-    // Hide authentication views
-    document.getElementById('registration-view').classList.remove('active-view');
-    document.getElementById('login-view').classList.remove('active-view');
-    // Show main app
-    document.getElementById('untersuchungen-main-view').classList.add('active-view');
-    // Show navigation bar
-    document.querySelector('.nav-bar').style.display = 'block';
-}
-
-function showRegistration() {
-    document.querySelectorAll('.view-container').forEach(view => {
-        view.classList.remove('active-view');
-    });
-    document.getElementById('registration-view').classList.add('active-view');
-}
-
-function showLogin() {
-    document.querySelectorAll('.view-container').forEach(view => {
-        view.classList.remove('active-view');
-    });
-    document.getElementById('login-view').classList.add('active-view');
-}
-
-// Initialize app - start with registration
-function initializeApp() {
-    // Hide navigation bar initially
-    document.querySelector('.nav-bar').style.display = 'none';
-    // Show registration as the first page
-    showRegistration();
-}
-
-// Initialize profile display
-document.addEventListener('DOMContentLoaded', function() {
-    updateProfileDisplay();
-    renderExaminations('noetige-view', 'noetige');
-    renderExaminations('geplante-view', 'geplante');
-    renderExaminations('nicht-durchgefuehrte-view', 'nichtDurchgefuehrte');
-    renderExaminations('erledigte-view', 'erledigte');
-    
-    // Edit profile button
-    document.getElementById('edit-profile-btn').addEventListener('click', function() {
-        populateEditForm();
-        showView('profile-edit-view');
-    });
-
-    // Gender toggle functionality
-    document.querySelectorAll('.toggle-option').forEach(toggle => {
-        toggle.addEventListener('click', function() {
-            document.querySelectorAll('.toggle-option').forEach(t => t.classList.remove('active'));
-            this.classList.add('active');
-        });
-    });
-
-    // Back button
-    document.getElementById('back-btn').addEventListener('click', function() {
-        showView('profile-view');
-    });
-
-    // Save button
-    document.getElementById('save-btn').addEventListener('click', function() {
-        const activeGender = document.querySelector('.toggle-option.active');
-        profileData.gender = activeGender.getAttribute('data-value');
-        
-        const inputs = document.querySelectorAll('.edit-input');
-        profileData.age = inputs[0].value;
-        profileData.height = inputs[1].value;
-        profileData.weight = inputs[2].value;
-        
-        updateProfileDisplay();
-        showView('profile-view');
-    });
-
-    // Authentication event listeners
-    document.getElementById('registration-form').addEventListener('submit', function(e) {
-        // e.preventDefault();
-        const vorname = document.querySelector('input[name="vorname"]').value;
-        const nachname = document.querySelector('input[name="nachname"]').value;
-        const password = document.querySelector('input[name="password"]').value;
-        const alter = document.querySelector('input[name="alter"]').value;
-        const geschlecht = document.querySelector('select[name="geschlecht"]').value;
-        const groesse = document.querySelector('input[name="groesse_cm"]').value;
-        const gewicht = document.querySelector('input[name="gewicht_kg"]').value;
-        
-        // Simple validation - all fields must be filled
-        if (vorname && nachname && password && alter && geschlecht && groesse && gewicht) {
-            // Store user data in memory (since localStorage is not available)
-            userData = {
-                vorname: vorname,
-                nachname: nachname,
-                alter: alter,
-                geschlecht: geschlecht,
-                groesse: groesse,
-                gewicht: gewicht
-            };
-            
-            // Update profile with registration data
-            profileData = {
-                age: alter,
-                height: (parseFloat(groesse) / 100).toFixed(2), // Convert cm to m
-                weight: gewicht,
-                gender: geschlecht === 'm' ? 'männlich' : (geschlecht === 'w' ? 'weiblich' : 'divers')
-            };
-            
-            alert('Registrierung erfolgreich! Sie werden jetzt zur Login-Seite weitergeleitet.');
-            // Redirect to login page after registration
-            showLogin();
-        } else {
-            alert('Bitte füllen Sie alle Felder aus');
-        }
-    });
-
-    // Login form submission
-    // document.getElementById('login-form').addEventListener('submit', function(e) {
-    //     e.preventDefault();
-    //     const vorname = document.querySelector('input[name="vorname"]').value;
-    //     const nachname = document.querySelector('input[name="nachname"]').value;
-        
-    //     // Simple validation - check if user exists and credentials match
-    //     if (vorname && nachname) {
-    //         // Basic check if user has registered
-    //         if (userData.vorname === vorname && userData.nachname === nachname) {
-    //             showAuthenticatedApp();
-    //         } else {
-    //             alert('Ungültige Anmeldedaten. Bitte überprüfen Sie Ihre Eingaben oder registrieren Sie sich.');
-    //         }
-    //     } else {
-    //         alert('Bitte füllen Sie alle Felder aus');
-    //     }
-    // });
-
-    document.getElementById('to-login').addEventListener('click', showLogin);
-    document.getElementById('to-register').addEventListener('click', showRegistration);
-
-    // Initialize app - start with registration
-    initializeApp();
-});
