@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+            <!-- Profile Edit View -->
+        <div class="view-container" id="profile-edit-view">
+            <div class="header">
+                <h1>Profil ändern</h1>
+            </div>
+            <div class="profile-edit-content">
+                <div class="edit-field">
+                    <label>Geschlecht</label>
+                    <div class="gender-toggle">
+                        <span class="toggle-option active" data-value="männlich">Männlich</span>
+                        <span class="toggle-option" data-value="weiblich">Weiblich</span>
+                    </div>
+                </div>
+                <div class="edit-field">
+                    <label>Alter</label>
+                    <input type="number" class="edit-input" value="45" min="1" max="120">
+                </div>
+                <div class="edit-field">
+                    <label>Größe</label>
+                    <input type="text" class="edit-input" value="1.75" placeholder="z.B. 1.75">
+                </div>
+                <div class="edit-field">
+                    <label>Gewicht</label>
+                    <input type="text" class="edit-input" value="83" placeholder="z.B. 75">
+                </div>
+            </div>
+            <div class="profile-edit-actions">
+                <div class="action-button" id="back-btn">Rückgängig</div>
+                <div class="action-button" id="save-btn">Speichern</div>
+            </div>
+        </div>
+        <script src="JS/protected.js"></script>
+</body>
+</html>
