@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Health App</title>
     <link rel="stylesheet" href="styles/styles.css">
+    <link rel="icon" href="Images/favicon.png" type="image/png">
 </head>
 <body>
     <div class="app-container">
@@ -65,11 +66,11 @@
                 <form class="auth-form" id="login-form">
                     <div class="input-group">
                         <label>E-Mail</label>
-                        <input type="text" name="email" class="auth-input" required>
+                        <input type="text" name="email" class="auth-input" id="user-email" required>
                     </div>
                     <div class="input-group">
                         <label>Passwort</label>
-                        <input type="password" name="password" class="auth-input" required>
+                        <input type="password" name="password" class="auth-input" id="user-password" required>
                     </div>
                     <button type="submit" class="auth-button">Einloggen</button>
                 </form>
@@ -200,5 +201,6 @@
     </div>
 
     <script src="app.js"></script>  
+    <script src="login.js"></script>
 </body>
 </html>
