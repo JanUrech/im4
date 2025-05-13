@@ -21,6 +21,10 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
 // Prüfung auf Existenz und Passwort
 if ($user && password_verify($password, $user['password'])) {
     echo "Login erfolgreich. Willkommen, " . htmlspecialchars($user['email']) . "!";
+    // Session starten und Nutzer-ID speichern
+    session_start();
+    $_SESSION['user_id'] = $user['ID'];
+    $_SESSION['email'] = $user['email'];
 } else {
     echo "Login fehlgeschlagen. E-Mail oder Passwort ist falsch.";
 }
