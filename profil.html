@@ -18,23 +18,22 @@
                     <div class="avatar"></div>
                 </div>
                 <div class="profile-info">
-                    <div class="info-pill">35 Jahre</div>
-                    <div class="info-pill">75kg</div>
-                    <div class="info-pill">176cm</div>
+                    <!-- Profile data will be loaded from database -->
+                    <div class="info-pill">Lädt...</div>
                 </div>
             </div>
             <div class="profile-actions">
-                <div class="action-button" id="edit-profile-btn">Bearbeiten</div>
+                <div class="action-button" onclick="window.location.href='profil-bearbeiten.html'">Bearbeiten</div>
             </div>
         </div>
         
         <!-- Navigation Bar -->
         <div class="nav-bar">
-            <div class="nav-item active" data-view="profil">Profil</div>
-            <div class="nav-item" data-view="untersuchungen">Untersuchungen</div>
+            <div class="nav-item active">Profil</div>
+            <div class="nav-item" onclick="window.location.href='protected.html'">Untersuchungen</div>
         </div>
     </div>
 
-    <script src="JS/app.js"></script>
+    <script src="JS/profile.js"></script>
 </body>
 </html>

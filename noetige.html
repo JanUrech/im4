@@ -20,11 +20,16 @@
         
         <!-- Navigation Bar -->
         <div class="nav-bar">
-            <div class="nav-item" data-view="profil">Profil</div>
-            <div class="nav-item active" data-view="untersuchungen">Untersuchungen</div>
+            <div class="nav-item" onclick="window.location.href='profil.html'">Profil</div>
+            <div class="nav-item active" onclick="window.location.href='protected.html'">Untersuchungen</div>
         </div>
     </div>
 
-    <script src="JS/app.js"></script>
+    <script src="JS/examinations.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            renderExaminations('noetige-list', 'noetige');
+        });
+    </script>
 </body>
 </html>
