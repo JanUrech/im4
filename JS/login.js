@@ -1,4 +1,4 @@
-console.log("login.js geladen");
+console.log("login.js geladenneu");
 
 document.getElementById("login-form").addEventListener("submit", async (e) => {
   e.preventDefault(); // Verhindert das Neuladen
@@ -32,7 +32,7 @@ document.getElementById("login-form").addEventListener("submit", async (e) => {
     alert(reply);
 
     if (reply.includes("Login erfolgreich. ")) {
-      window.location.href = "protected.html"; // Weiterleitung zur Startseite
+      window.location.href = "TestUntersuch.html"; // Weiterleitung zur Startseite
     } else {
       alert("Login fehlgeschlagen. Bitte überprüfe deine Anmeldedaten.");
     }

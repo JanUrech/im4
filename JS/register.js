@@ -37,7 +37,7 @@ document.getElementById("register-form").addEventListener("submit", async (e) =>
 
     if (reply.includes("✅")) {
       // Nach erfolgreicher Registrierung ggf. weiterleiten
-    //  window.location.href = "protected.html";
+     window.location.href = "untersuchungen.html";
         
 
     }

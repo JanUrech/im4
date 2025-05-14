@@ -1,5 +1,9 @@
 <?php
+
 session_destroy();
+session_start();
+
+// Datenbankverbindung herstellen
 require_once __DIR__ . '/../system/config.php';
 header('Content-Type: text/plain; charset=UTF-8');
 
@@ -22,10 +26,13 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
 if ($user && password_verify($password, $user['password'])) {
     echo "Login erfolgreich. Willkommen, " . htmlspecialchars($user['email']) . "!";
     // Session starten und Nutzer-ID speichern
-    session_start();
+
     $_SESSION['user_id'] = $user['ID'];
     $_SESSION['email'] = $user['email'];
+
+    echo $_SESSION['user_id'];
+    echo $_SESSION['email'];
 } else {
     echo "Login fehlgeschlagen. E-Mail oder Passwort ist falsch.";
 }
-?>
+?> 

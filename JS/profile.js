@@ -6,9 +6,11 @@ let profileData = {};
 // Load profile data from database
 async function loadProfileFromDatabase() {
     try {
-        const response = await fetch('php/get_profile.php');
+        const response = await fetch('php/get_profile.php', {
+            credentials: 'include'
+        });
         const data = await response.json();
-        
+
         if (data.success && data.profile) {
             profileData = data.profile;
             updateProfileDisplay();
@@ -35,9 +37,9 @@ async function saveProfileToDatabase() {
             },
             body: JSON.stringify(profileData)
         });
-        
+
         const data = await response.json();
-        
+
         if (data.success) {
             console.log('Profil erfolgreich gespeichert');
             return true;
@@ -57,9 +59,9 @@ async function saveProfileToDatabase() {
 function updateProfileDisplay() {
     const profileInfo = document.querySelector('.profile-info');
     if (profileInfo && profileData) {
-        const genderText = profileData.gender === 'männlich' ? 'Männlich' : 
-                          profileData.gender === 'weiblich' ? 'Weiblich' : 'Divers';
-        
+        const genderText = profileData.gender === 'männlich' ? 'Männlich' :
+            profileData.gender === 'weiblich' ? 'Weiblich' : 'Divers';
+
         profileInfo.innerHTML = `
             <div class="info-pill">${genderText}</div>
             <div class="info-pill">${profileData.age} Jahre</div>
@@ -72,7 +74,7 @@ function updateProfileDisplay() {
 // Populate profile edit form
 function populateEditForm() {
     if (!profileData) return;
-    
+
     const genderToggles = document.querySelectorAll('.toggle-option');
     genderToggles.forEach(toggle => {
         toggle.classList.remove('active');
@@ -89,34 +91,34 @@ function populateEditForm() {
     }
 }
 
-document.addEventListener('DOMContentLoaded', async function() {
+document.addEventListener('DOMContentLoaded', async function () {
     // Load profile data from database
     await loadProfileFromDatabase();
-    
+
     // Only populate edit form if we're on the edit page
     if (window.location.pathname.includes('profil-bearbeiten')) {
         populateEditForm();
-        
+
         // Gender toggle functionality
         document.querySelectorAll('.toggle-option').forEach(toggle => {
-            toggle.addEventListener('click', function() {
+            toggle.addEventListener('click', function () {
                 document.querySelectorAll('.toggle-option').forEach(t => t.classList.remove('active'));
                 this.classList.add('active');
             });
         });
-        
+
         // Save button
         const saveBtn = document.getElementById('save-btn');
         if (saveBtn) {
-            saveBtn.addEventListener('click', async function() {
+            saveBtn.addEventListener('click', async function () {
                 const activeGender = document.querySelector('.toggle-option.active');
                 profileData.gender = activeGender.getAttribute('data-value');
-                
+
                 const inputs = document.querySelectorAll('.edit-input');
                 profileData.age = parseInt(inputs[0].value);
                 profileData.height = parseFloat(inputs[1].value);
                 profileData.weight = parseFloat(inputs[2].value);
-                
+
                 // Save to database
                 const success = await saveProfileToDatabase();
                 if (success) {
