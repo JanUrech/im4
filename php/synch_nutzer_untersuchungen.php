@@ -5,7 +5,7 @@ header('Content-Type: text/plain; charset=UTF-8');
 
 // Nutzer und Untersuchungen abfragen
 $nutzerStmt = $pdo->query("SELECT ID FROM nutzer");
-$untersuchungStmt = $pdo->query("SELECT id FROM untersuchung");
+$untersuchungStmt = $pdo->query("SELECT ID FROM untersuchung");
 
 $nutzer = $nutzerStmt->fetchAll(PDO::FETCH_COLUMN);
 $untersuchungen = $untersuchungStmt->fetchAll(PDO::FETCH_COLUMN);
