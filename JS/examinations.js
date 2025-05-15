@@ -147,3 +147,9 @@ function getCurrentPage() {
     const page = path.substring(path.lastIndexOf('/') + 1);
     return page.split('.')[0] || 'index';
 }
+
+// Beim Laden des Skripts: Sync mit Backend auslösen
+fetch('/../php/sync_examinations.php')
+    .then(response => response.json())
+    .then(data => console.log("Synchronisation:", data))
+    .catch(error => console.error("Fehler bei der Synchronisation:", error));
