@@ -29,7 +29,7 @@ document.getElementById("login-form").addEventListener("submit", async (e) => {
     });
     const reply = await res.text();
     console.log("Antwort vom Server:\n" + reply);
-    alert(reply);
+    //alert(reply);
 
     if (reply.includes("Login erfolgreich. ")) {
       window.location.href = "TestUntersuch.html"; // Weiterleitung zur Startseite

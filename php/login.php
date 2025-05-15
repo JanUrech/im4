@@ -1,5 +1,6 @@
 <?php
 
+session_start();
 session_destroy();
 session_start();
 
@@ -10,6 +11,8 @@ header('Content-Type: text/plain; charset=UTF-8');
 // Eingaben sichern
 $email = $_POST['email'] ?? '';
 $password = $_POST['password'] ?? '';
+unset($_POST['email']);
+unset($_POST['password']);
 
 // Frühzeitige Prüfung
 if (empty($email) || empty($password)) {
@@ -35,4 +38,3 @@ if ($user && password_verify($password, $user['password'])) {
 } else {
     echo "Login fehlgeschlagen. E-Mail oder Passwort ist falsch.";
 }
-?> 
