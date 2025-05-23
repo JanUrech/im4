@@ -14,16 +14,16 @@ if (!isset($_SESSION['user_id'])) {
 $nutzerId = $_SESSION['user_id'];
 
 // Daten abrufen (JOIN mit Untersuchung für Namen)
-$stmt = $pdo->prepare("
-    SELECT 
-        u_untersuchung.untersuchung_id,
-        untersuchung.Untersuchung AS name,
-        u_untersuchung.letzte_untersuchung,
-        u_untersuchung.naechste_untersuchung,
-        u_untersuchung.status
-    FROM nutzer_untersuchung u_untersuchung
-    JOIN untersuchung ON untersuchung.ID = u_untersuchung.untersuchung_id
-    WHERE u_untersuchung.nutzer_id = :nutzer_id
+$stmt = $pdo->prepare(" 
+SELECT 
+    u_untersuchung.untersuchung_id,
+    untersuchungen.Untersuchung AS name,
+    u_untersuchung.letzte_untersuchung,
+    u_untersuchung.naechste_untersuchung,
+    u_untersuchung.status
+FROM nutzer_untersuchung u_untersuchung
+JOIN untersuchungen ON untersuchungen.ID = u_untersuchung.untersuchung_id
+WHERE u_untersuchung.nutzer_id = :nutzer_id
 ");
 $stmt->execute(['nutzer_id' => $nutzerId]);
 $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
