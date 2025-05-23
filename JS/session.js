@@ -8,4 +8,4 @@ async function destroySessio() {
   }
 }
 
-window.onload = destroySessio();
+window.onload = destroySessio;
