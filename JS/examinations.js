@@ -1,19 +1,20 @@
-// examinations.js - Only for examination functionality
+// examinations.js – Für die Anzeige und Verwaltung von Untersuchungen
 console.log("examinations.js geladen");
 
-// Data storage for examinations (localStorage)
-let examinations = JSON.parse(localStorage.getItem('examinations') || JSON.stringify({
-    noetige: ['Blutabnahme', 'Blutdruck', 'Gewicht'],
-    geplante: ['Zahnarzt (15.06.2025)', 'Hautcheck (23.07.2025)'],
-    nichtDurchgefuehrte: ['Augenarzt', 'Allergietest'],
-    erledigte: ['Blutabnahme (03.03.2025)', 'Zahnarzt (10.01.2025)']
-}));
+// Datenobjekt für Untersuchungen (initial leer, wird vom Server geladen)
+let examinations = {
+    noetige: [],
+    geplante: [],
+    nichtDurchgefuehrte: [],
+    erledigte: []
+};
 
 function saveExaminations() {
+    // Nur optional, falls clientseitige Speicherung gewünscht ist
     localStorage.setItem('examinations', JSON.stringify(examinations));
 }
 
-// Function to render examinations in a view
+// Funktion zur Darstellung der Untersuchungen im DOM
 function renderExaminations(containerId, category) {
     const list = document.getElementById(containerId);
     if (!list) return;
@@ -113,7 +114,7 @@ function renderExaminations(containerId, category) {
     });
 }
 
-// Function to move examination between categories
+// Untersuchung zwischen Kategorien verschieben
 window.moveExamination = function(fromCategory, index, toCategory) {
     const examination = examinations[fromCategory][index];
     
@@ -121,15 +122,14 @@ window.moveExamination = function(fromCategory, index, toCategory) {
     
     if (toCategory === 'erledigte') {
         const today = new Date().toLocaleDateString('de-DE');
-        const examName = examination.replace(/\s*\(\d{2}\.\d{2}\.\d{4}\)/g, '');
+        const examName = examination.replace(/\s*\(\d{2}\.\d{2}\.\d{4}\)/g, '').replace(/ \(zuletzt am.*\)/, '');
         examinations[toCategory].push(`${examName} (${today})`);
     } else {
         examinations[toCategory].push(examination);
     }
     
     saveExaminations();
-    
-    // Re-render current view
+
     const currentPage = getCurrentPage();
     if (currentPage === 'noetige') {
         renderExaminations('noetige-list', 'noetige');
@@ -142,14 +142,40 @@ window.moveExamination = function(fromCategory, index, toCategory) {
     }
 }
 
+// Ermitteln der aktuellen Unterseite
 function getCurrentPage() {
     const path = window.location.pathname;
     const page = path.substring(path.lastIndexOf('/') + 1);
     return page.split('.')[0] || 'index';
 }
 
-// Beim Laden des Skripts: Sync mit Backend auslösen
-fetch('/../php/sync_examinations.php')
-    .then(response => response.json())
-    .then(data => console.log("Synchronisation:", data))
-    .catch(error => console.error("Fehler bei der Synchronisation:", error));
+// Untersuchungen vom Backend laden
+fetch('/php/sync_examinations.php')
+    .then(response => {
+        if (!response.ok) {
+            throw new Error("Serverantwort nicht ok: " + response.status);
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.error) {
+            console.error("Fehler in Daten:", data.error);
+            return;
+        }
+
+        examinations = data;
+
+        const currentPage = getCurrentPage();
+        if (currentPage === 'noetige') {
+            renderExaminations('noetige-list', 'noetige');
+        } else if (currentPage === 'geplante') {
+            renderExaminations('geplante-list', 'geplante');
+        } else if (currentPage === 'nicht-durchgefuehrte') {
+            renderExaminations('nicht-durchgefuehrte-list', 'nichtDurchgefuehrte');
+        } else if (currentPage === 'erledigte') {
+            renderExaminations('erledigte-list', 'erledigte');
+        }
+    })
+    .catch(error => {
+        console.error("Fehler beim Abrufen der Daten:", error.message);
+    });
