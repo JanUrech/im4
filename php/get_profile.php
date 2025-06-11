@@ -9,6 +9,7 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 require_once __DIR__ . '/../system/config.php';
+// Database connection
 
 try {
     $stmt = $pdo->prepare("SELECT vorname, nachname, alter_jahre, geschlecht, groesse_cm, gewicht_kg, BMI FROM nutzer WHERE ID = :user_id");

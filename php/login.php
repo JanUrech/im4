@@ -4,9 +4,9 @@
 ini_set('session.cookie_httponly', 1);
 // ini_set('session.cookie_secure', 1); // Aktiviere dies, wenn HTTPS verwendet wird
 session_start();
-header('Content-Type: application/json');
+header('Content-Type: application/json; charset=UTF-8');
 
-require_once __DIR__ . '../php/config.php';
+require_once __DIR__ . '/../system/config.php';
 
 // Nur POST-Anfragen erlauben
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -31,7 +31,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['user_id'] = $user['ID'];
         $_SESSION['email']   = $user['email'];
 
-        echo json_encode(["status" => "success"]);
+        echo json_encode([
+            "status" => "success",
+            "message" => "Login erfolgreich. Willkommen, " . htmlspecialchars($user['email']) . "!"
+        ]);
     } else {
         echo json_encode(["status" => "error", "message" => "E-Mail oder Passwort ist falsch."]);
     }
