@@ -30,7 +30,7 @@ document.getElementById("login-form").addEventListener("submit", async (e) => {
     //alert(JSON.stringify(data));
 
     if (data.status === "success") {
-      window.location.href = "TestUntersuch.html";
+      window.location.href = "homepage.html";
     } else {
       alert(data.message || "Login fehlgeschlagen.");
     }
