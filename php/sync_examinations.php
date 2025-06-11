@@ -16,13 +16,13 @@ $nutzerId = $_SESSION['user_id'];
 // Daten abrufen (JOIN mit Untersuchung für Namen)
 $stmt = $pdo->prepare(" 
 SELECT 
-    u_untersuchung.untersuchung_id,
+    u_untersuchung.untersuchungen_id,
     untersuchungen.Untersuchung AS name,
     u_untersuchung.letzte_untersuchung,
     u_untersuchung.naechste_untersuchung,
     u_untersuchung.status
 FROM nutzer_untersuchung u_untersuchung
-JOIN untersuchungen ON untersuchungen.ID = u_untersuchung.untersuchung_id
+JOIN untersuchungen ON untersuchungen.ID = u_untersuchung.untersuchungen_id
 WHERE u_untersuchung.nutzer_id = :nutzer_id
 ");
 $stmt->execute(['nutzer_id' => $nutzerId]);
@@ -39,17 +39,19 @@ $data = [
 // Alle in gleiche Kategorie verteilen (bis Status implementiert ist)
 foreach ($results as $row) {
     $name = $row['name'];
+    $status = $row['status'];
     $letzte = $row['letzte_untersuchung'];
     $naechste = $row['naechste_untersuchung'];
 
-    // Beispielhafte Zuordnung: Falls Datum für nächste Untersuchung vorhanden → geplante, sonst → noetige
-    if (!empty($naechste)) {
-        $data['geplante'][] = "$name (" . date('d.m.Y', strtotime($naechste)) . ")";
-    } elseif (!empty($letzte)) {
-        $data['noetige'][] = "$name (zuletzt am " . date('d.m.Y', strtotime($letzte)) . ")";
-    } else {
+    // Status-basiertes Routing
+    if ($status === 'offen') {
         $data['noetige'][] = $name;
+    } elseif ($status === 'geplant') {
+        $data['geplante'][] = $name;
+    } elseif ($status === 'erledigt') {
+        $data['erledigte'][] = $name;
     }
+    // Optional: weitere Status oder Anzeigearten können ergänzt werden
 }
 
 echo json_encode($data);
