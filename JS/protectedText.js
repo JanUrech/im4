@@ -20,6 +20,6 @@ fetch("php/protected.php")
     })
     .catch((error) => {
         console.error("Fehler beim Abrufen der Daten:", error);
-        // Hier kannst du die Daten weiterverarbeiten
-        alert("Willkommen, " + data.firstname + " " + data.lastname);
+        // Kein Zugriff auf data im Fehlerfall!
+        alert("Fehler beim Abrufen der Daten: " + error);
     });

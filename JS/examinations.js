@@ -85,8 +85,8 @@ function renderExaminations(containerId, category) {
                             <button class="action-btn" onclick="updateStatusAndMove('${category}', ${index}, 'geplante', 'geplant')">
                                 Zu Geplante
                             </button>
-                            <button class="action-btn secondary" onclick="updateStatusAndMove('${category}', ${index}, 'erledigte', 'erledigt')">
-                                Als Erledigt markieren
+                            <button class="action-btn secondary" onclick="updateStatusAndMove('${category}', ${index}, 'nichtDurchgefuehrte', 'abgelehnt')">
+                                Als Nicht durchgeführt markieren
                             </button>
                         </div>
                     `;

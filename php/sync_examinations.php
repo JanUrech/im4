@@ -51,6 +51,8 @@ foreach ($results as $row) {
         $data['geplante'][] = ['id' => $id, 'name' => $name];
     } elseif ($status === 'erledigt') {
         $data['erledigte'][] = ['id' => $id, 'name' => $name];
+    } elseif ($status === 'abgelehnt') {
+        $data['nichtDurchgefuehrte'][] = ['id' => $id, 'name' => $name];
     }
     // Optional: weitere Status oder Anzeigearten können ergänzt werden
 }
