@@ -4,10 +4,9 @@
 session_start();
 session_destroy();
 session_start();
-header('Content-Type: application/json; charset=UTF-8');
+header('Content-Type: application/json; charset=UTF-8'); // Nur JSON Header setzen
 
 require_once __DIR__ . '/../system/config.php';
-header('Content-Type: text/plain; charset=UTF-8');
 
 // Eingaben sichern
 $email = $_POST['email'] ?? '';
@@ -15,6 +14,7 @@ $password = $_POST['password'] ?? '';
 unset($_POST['email']);
 unset($_POST['password']);
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($email) || empty($password)) {
         echo json_encode(["status" => "error", "message" => "E-Mail und Passwort müssen ausgefüllt sein."]);
         exit;

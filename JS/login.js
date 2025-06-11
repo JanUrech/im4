@@ -25,9 +25,9 @@ document.getElementById("login-form").addEventListener("submit", async (e) => {
       method: "POST",
       body: formData,
     });
-    const reply = await res.text();
-    console.log("Antwort vom Server:\n" + reply);
-    //alert(reply);
+    const data = await res.json(); // Antwort als JSON parsen
+    console.log("Antwort vom Server:\n", data);
+    //alert(JSON.stringify(data));
 
     if (data.status === "success") {
       window.location.href = "TestUntersuch.html";
