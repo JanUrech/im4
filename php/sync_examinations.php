@@ -40,16 +40,17 @@ $data = [
 foreach ($results as $row) {
     $name = $row['name'];
     $status = $row['status'];
+    $id = $row['untersuchungen_id']; // Klein geschrieben, wie in der SQL-Auswahl
     $letzte = $row['letzte_untersuchung'];
     $naechste = $row['naechste_untersuchung'];
 
     // Status-basiertes Routing
     if ($status === 'offen') {
-        $data['noetige'][] = $name;
+        $data['noetige'][] = ['id' => $id, 'name' => $name];
     } elseif ($status === 'geplant') {
-        $data['geplante'][] = $name;
+        $data['geplante'][] = ['id' => $id, 'name' => $name];
     } elseif ($status === 'erledigt') {
-        $data['erledigte'][] = $name;
+        $data['erledigte'][] = ['id' => $id, 'name' => $name];
     }
     // Optional: weitere Status oder Anzeigearten können ergänzt werden
 }
