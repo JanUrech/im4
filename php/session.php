@@ -1,5 +1,8 @@
 <?php
 session_start();
+$_SESSION = [];
 session_destroy();
 
-echo "Session kaputt";
+
+
+echo "Session kaputtttt";
