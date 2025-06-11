@@ -1,18 +1,19 @@
 <?php
 // login.php
 
-ini_set('session.cookie_httponly', 1);
-// ini_set('session.cookie_secure', 1); // Aktiviere dies, wenn HTTPS verwendet wird
+session_start();
+session_destroy();
 session_start();
 header('Content-Type: application/json; charset=UTF-8');
 
 require_once __DIR__ . '/../system/config.php';
+header('Content-Type: text/plain; charset=UTF-8');
 
-// Nur POST-Anfragen erlauben
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Eingaben validieren
-    $email    = trim($_POST['email'] ?? '');
-    $password = trim($_POST['password'] ?? '');
+// Eingaben sichern
+$email = $_POST['email'] ?? '';
+$password = $_POST['password'] ?? '';
+unset($_POST['email']);
+unset($_POST['password']);
 
     if (empty($email) || empty($password)) {
         echo json_encode(["status" => "error", "message" => "E-Mail und Passwort müssen ausgefüllt sein."]);

@@ -25,10 +25,9 @@ document.getElementById("login-form").addEventListener("submit", async (e) => {
       method: "POST",
       body: formData,
     });
-
-    const data = await res.json(); // ⚠️ JSON statt text()
-
-    console.log("Antwort vom Server:", data);
+    const reply = await res.text();
+    console.log("Antwort vom Server:\n" + reply);
+    //alert(reply);
 
     if (data.status === "success") {
       window.location.href = "TestUntersuch.html";
