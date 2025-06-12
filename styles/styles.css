@@ -21,6 +21,52 @@ body {
     overflow: hidden;
 }
 
+/* Modal Overlay immer ganz oben anzeigen */
+.arzt-modal-overlay {
+    z-index: 9999 !important;
+    position: fixed;
+    left: 0; top: 0; right: 0; bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Optional: overflow von .app-container entfernen, falls Modal verdeckt wird */
+.app-container {
+    overflow: visible !important;
+}
+
+/* --- MODAL FIX FÜR DESKTOP --- */
+.arzt-modal-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    z-index: 99999 !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(20, 54, 62, 0.7);
+}
+.arzt-modal-box {
+    background: #EBF7F9;
+    color: #14363e;
+    border-radius: 18px;
+    box-shadow: 0 8px 32px rgba(20, 54, 62, 0.25);
+    padding: 32px 28px 24px 28px;
+    min-width: 320px;
+    max-width: 95vw;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Stelle sicher, dass .app-container und .view-container keine Modals verdecken */
+.app-container, .view-container {
+    overflow: visible !important;
+}
+
 /* Responsive Styles für Desktop */
 @media (min-width: 769px) {
     .app-container {
@@ -805,4 +851,135 @@ body {
             transform: translateY(0);
         }
     }
+}
+
+/* Arzt-Modal Overlay */
+.arzt-modal-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(20, 54, 62, 0.7);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Arzt-Modal Box */
+.arzt-modal-box {
+    background: #EBF7F9;
+    color: #14363e;
+    border-radius: 18px;
+    box-shadow: 0 8px 32px rgba(20, 54, 62, 0.25);
+    padding: 32px 28px 24px 28px;
+    min-width: 320px;
+    max-width: 95vw;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    border: 3px solid red; /* Test: Sichtbarer Rahmen, kann später entfernt werden */
+}
+
+.arzt-modal-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 18px;
+    color: #14363e;
+    text-align: center;
+}
+
+.arzt-modal-form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 14px;
+}
+
+.arzt-modal-label {
+    font-size: 1rem;
+    margin-bottom: 4px;
+    color: #14363e;
+    font-weight: 500;
+}
+
+.arzt-modal-btn-row {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 10px;
+}
+
+.arzt-modal-btn {
+    background: #14363e;
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    padding: 10px 22px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.arzt-modal-btn.secondary {
+    background: #1a4a55;
+}
+.arzt-modal-btn:hover, .arzt-modal-btn.secondary:hover {
+    background: #0e2328;
+}
+
+/* Arzt neu-Button neben Dropdown */
+.arzt-neu-btn {
+    background: #1a4a55;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 6px 16px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    margin-left: 8px;
+    cursor: pointer;
+    transition: background 0.2s;
+    vertical-align: middle;
+}
+.arzt-neu-btn:hover {
+    background: #14363e;
+}
+
+/* Arzt Info-Button neben Dropdown */
+.arzt-info-btn {
+    background: #EBF7F9;
+    color: #14363e;
+    border: 1.5px solid #1a4a55;
+    border-radius: 10px;
+    padding: 6px 16px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    margin-left: 8px;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+    vertical-align: middle;
+}
+.arzt-info-btn:hover {
+    background: #1a4a55;
+    color: #fff;
+}
+
+/* Arzt Dropdown */
+.arzt-dropdown {
+    width: 70%;
+    min-width: 120px;
+    padding: 8px 12px;
+    border-radius: 10px;
+    border: 1px solid #1a4a55;
+    background: #fff;
+    color: #14363e;
+    font-size: 1rem;
+    margin-right: 4px;
+    margin-bottom: 0;
+    outline: none;
+    transition: border 0.2s;
+}
+.arzt-dropdown:focus {
+    border: 2px solid #14363e;
 }

@@ -66,32 +66,37 @@ function renderExaminations(containerId, category) {
                             </button>
                         </div>
                     `;
-                } else if (category === 'geplante') {
+                } else if (category === 'geplante' || category === 'erledigte') {
                     // Hole das gespeicherte Datum aus dem Objekt, falls vorhanden
                     let dateValue = '';
-                    let nextExamDate = '';
-                    if (typeof examination === 'object' && examination !== null) {
-                        // Prüfe beide Varianten: direkt oder verschachtelt
-                        if (examination.naechste_untersuchung && examination.naechste_untersuchung !== 'null' && examination.naechste_untersuchung !== null && examination.naechste_untersuchung !== '') {
-                            nextExamDate = examination.naechste_untersuchung;
-                        } else if (
-                            examination.nutzer_untersuchung &&
-                            examination.nutzer_untersuchung.naechste_untersuchung &&
-                            examination.nutzer_untersuchung.naechste_untersuchung !== 'null' &&
-                            examination.nutzer_untersuchung.naechste_untersuchung !== null &&
-                            examination.nutzer_untersuchung.naechste_untersuchung !== ''
-                        ) {
-                            nextExamDate = examination.nutzer_untersuchung.naechste_untersuchung;
+                    if (category === 'erledigte') {
+                        if (typeof examination === 'object' && examination.letzte_untersuchung && examination.letzte_untersuchung !== 'null' && examination.letzte_untersuchung !== null && examination.letzte_untersuchung !== '') {
+                            dateValue = examination.letzte_untersuchung.split('T')[0];
                         }
-                    }
-                    if (nextExamDate && !isNaN(Date.parse(nextExamDate))) {
-                        dateValue = nextExamDate.split('T')[0];
+                    } else {
+                        let nextExamDate = '';
+                        if (typeof examination === 'object' && examination !== null) {
+                            if (examination.naechste_untersuchung && examination.naechste_untersuchung !== 'null' && examination.naechste_untersuchung !== null && examination.naechste_untersuchung !== '') {
+                                nextExamDate = examination.naechste_untersuchung;
+                            } else if (
+                                examination.nutzer_untersuchung &&
+                                examination.nutzer_untersuchung.naechste_untersuchung &&
+                                examination.nutzer_untersuchung.naechste_untersuchung !== 'null' &&
+                                examination.nutzer_untersuchung.naechste_untersuchung !== null &&
+                                examination.nutzer_untersuchung.naechste_untersuchung !== ''
+                            ) {
+                                nextExamDate = examination.nutzer_untersuchung.naechste_untersuchung;
+                            }
+                        }
+                        if (nextExamDate && !isNaN(Date.parse(nextExamDate))) {
+                            dateValue = nextExamDate.split('T')[0];
+                        }
                     }
                     details.innerHTML = `
                         <h3>Details eintragen</h3>
                         <div class="form-group">
-                            <label for="value">Wert</label>
-                            <input type="text" class="form-control" id="value-${examId}" placeholder="Wert eintragen">
+                            <label for="value-${examId}">Arzt</label>
+                            <input id="value-${examId}" class="form-control" type="text" placeholder="Arzt wählen">
                         </div>
                         <div class="form-group">
                             <label for="date">Datum</label>
@@ -101,9 +106,7 @@ function renderExaminations(containerId, category) {
                             <button class="action-btn secondary" onclick="saveExaminationDate('${category}', ${index})">
                                 Speichern
                             </button>
-                            <button class="action-btn secondary" onclick="updateStatusAndMove('${category}', ${index}, 'erledigte', 'erledigt')">
-                                Als Erledigt markieren
-                            </button>
+                            ${category === 'geplante' ? `<button class="action-btn secondary" onclick="updateStatusAndMove('${category}', ${index}, 'erledigte', 'erledigt')">Als Erledigt markieren</button>` : ''}
                         </div>
                     `;
                 } else if (category === 'nichtDurchgefuehrte') {
@@ -112,28 +115,6 @@ function renderExaminations(containerId, category) {
                         <div class="examination-actions">
                             <button class="action-btn" onclick="updateStatusAndMove('${category}', ${index}, 'noetige', 'offen')">
                                 Zurück zu Nötige
-                            </button>
-                        </div>
-                    `;
-                } else if (category === 'erledigte') {
-                    // Hole das gespeicherte Datum aus dem Objekt, falls vorhanden
-                    let dateValue = '';
-                    if (typeof examination === 'object' && examination.letzte_untersuchung && examination.letzte_untersuchung !== 'null' && examination.letzte_untersuchung !== null && examination.letzte_untersuchung !== '') {
-                        dateValue = examination.letzte_untersuchung.split('T')[0];
-                    }
-                    details.innerHTML = `
-                        <h3>Details eintragen</h3>
-                        <div class="form-group">
-                            <label for="value">Wert</label>
-                            <input type="text" class="form-control" id="value-${examId}" placeholder="Wert eintragen">
-                        </div>
-                        <div class="form-group">
-                            <label for="date">Datum</label>
-                            <input type="date" class="form-control" id="date-${examId}"${dateValue ? ` value="${dateValue}"` : ''}>
-                        </div>
-                        <div class="examination-actions">
-                            <button class="action-btn secondary" onclick="saveExaminationDate('${category}', ${index})">
-                                Speichern
                             </button>
                         </div>
                     `;
@@ -151,6 +132,7 @@ function renderExaminations(containerId, category) {
                     `;
                 }
                 this.insertAdjacentElement('afterend', details);
+                if (window.initArztDropdowns) window.initArztDropdowns();
             }
         });
         list.appendChild(item);

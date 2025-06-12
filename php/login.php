@@ -32,6 +32,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['user_id'] = $user['ID'];
         $_SESSION['email']   = $user['email'];
 
+        // Synchronisation: Nutzer-Untersuchungen-Kombis sicherstellen
+        include __DIR__ . '/synch_nutzer_untersuchungen.php';
+
         echo json_encode([
             "status" => "success",
             "message" => "Login erfolgreich. Willkommen, " . htmlspecialchars($user['email']) . "!"
