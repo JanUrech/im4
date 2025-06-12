@@ -879,7 +879,6 @@ body {
     display: flex;
     flex-direction: column;
     gap: 10px;
-    border: 3px solid red; /* Test: Sichtbarer Rahmen, kann später entfernt werden */
 }
 
 .arzt-modal-title {

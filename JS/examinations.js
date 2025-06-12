@@ -58,11 +58,11 @@ function renderExaminations(containerId, category) {
                             <input type="date" class="form-control" id="next-date-${examId}">
                         </div>
                         <div class="examination-actions">
-                            <button class="action-btn secondary" onclick="saveNoetigeDates('${category}', ${index})">
-                                Speichern
-                            </button>
                             <button class="action-btn" onclick="rejectNoetige('${category}', ${index})">
                                 Ablehnen
+                            </button>
+                            <button class="action-btn secondary" onclick="saveNoetigeDates('${category}', ${index})">
+                                Speichern
                             </button>
                         </div>
                     `;

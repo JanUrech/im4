@@ -79,11 +79,11 @@ foreach ($rows as $row) {
         }
     }
 
-    // Status-Logik wie gehabt
-    if ($faellig && $faellig > $heute) {
-        $status = 'erledigt';
-    } elseif ($naechste && $naechste > $heute) {
+    // Status-Logik: Wenn naechste_untersuchung in der Zukunft, immer 'geplant'
+    if ($naechste && $naechste > $heute) {
         $status = 'geplant';
+    } elseif ($faellig && $faellig > $heute) {
+        $status = 'erledigt';
     }
     $stmtUpdate = $pdo->prepare('UPDATE nutzer_untersuchung SET status = :status WHERE nutzer_id = :nutzer_id AND untersuchungen_id = :untersuchungen_id');
     $stmtUpdate->execute([

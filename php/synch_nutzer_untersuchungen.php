@@ -37,4 +37,3 @@ foreach ($nutzer as $nutzerId) {
         }
     }
 }
-echo "Einträge erfolgreich eingefügt.";
