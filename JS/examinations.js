@@ -116,6 +116,28 @@ function renderExaminations(containerId, category) {
                             </button>
                         </div>
                     `;
+                } else if (category === 'erledigte') {
+                    // Hole das gespeicherte Datum aus dem Objekt, falls vorhanden
+                    let dateValue = '';
+                    if (typeof examination === 'object' && examination.letzte_untersuchung && examination.letzte_untersuchung !== 'null' && examination.letzte_untersuchung !== null && examination.letzte_untersuchung !== '') {
+                        dateValue = examination.letzte_untersuchung.split('T')[0];
+                    }
+                    details.innerHTML = `
+                        <h3>Details eintragen</h3>
+                        <div class="form-group">
+                            <label for="value">Wert</label>
+                            <input type="text" class="form-control" id="value-${examId}" placeholder="Wert eintragen">
+                        </div>
+                        <div class="form-group">
+                            <label for="date">Datum</label>
+                            <input type="date" class="form-control" id="date-${examId}"${dateValue ? ` value="${dateValue}"` : ''}>
+                        </div>
+                        <div class="examination-actions">
+                            <button class="action-btn secondary" onclick="saveExaminationDate('${category}', ${index})">
+                                Speichern
+                            </button>
+                        </div>
+                    `;
                 } else {
                     details.innerHTML = `
                         <h3>Details eintragen</h3>
@@ -246,20 +268,28 @@ window.saveExaminationDate = function(category, index) {
         alert('Bitte ein Datum eingeben!');
         return;
     }
+    let body = `untersuchungen_id=${encodeURIComponent(examId)}`;
+    if (category === 'geplante') {
+        body += `&naechste_untersuchung=${encodeURIComponent(dateValue)}`;
+    } else if (category === 'erledigte') {
+        body += `&letzte_untersuchung=${encodeURIComponent(dateValue)}`;
+    }
     fetch('/php/update_examination_status.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: `untersuchungen_id=${encodeURIComponent(examId)}&naechste_untersuchung=${encodeURIComponent(dateValue)}`
+        body
     })
     .then(res => res.json())
     .then(data => {
         if (data.success) {
             // Aktualisiere das Datum auch im lokalen Objekt, damit es beim erneuten Öffnen angezeigt wird
             if (typeof examination === 'object' && examination !== null) {
-                if ('naechste_untersuchung' in examination) {
+                if (category === 'geplante' && 'naechste_untersuchung' in examination) {
                     examination.naechste_untersuchung = dateValue;
-                } else if (examination.nutzer_untersuchung && typeof examination.nutzer_untersuchung === 'object') {
+                } else if (category === 'geplante' && examination.nutzer_untersuchung && typeof examination.nutzer_untersuchung === 'object') {
                     examination.nutzer_untersuchung.naechste_untersuchung = dateValue;
+                } else if (category === 'erledigte' && 'letzte_untersuchung' in examination) {
+                    examination.letzte_untersuchung = dateValue;
                 }
             }
             alert('Datum gespeichert!');

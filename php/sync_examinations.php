@@ -54,7 +54,11 @@ foreach ($results as $row) {
             'naechste_untersuchung' => $naechste
         ];
     } elseif ($status === 'erledigt') {
-        $data['erledigte'][] = ['id' => $id, 'name' => $name];
+        $data['erledigte'][] = [
+            'id' => $id,
+            'name' => $name,
+            'letzte_untersuchung' => $letzte
+        ];
     } elseif ($status === 'abgelehnt') {
         $data['nichtDurchgefuehrte'][] = ['id' => $id, 'name' => $name];
     }
