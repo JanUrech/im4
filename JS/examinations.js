@@ -1,40 +1,42 @@
 // examinations.js – Für die Anzeige und Verwaltung von Untersuchungen
-console.log("examinations.js geladen");
+console.log("examinations.js geladen"); // Sagt in der Konsole: Das Skript ist gestartet
 
-// Datenobjekt für Untersuchungen (initial leer, wird vom Server geladen)
+// Hier speichern wir alle Untersuchungen, die wir vom Server bekommen
 let examinations = {
-    noetige: [],
-    geplante: [],
-    nichtDurchgefuehrte: [],
-    erledigte: []
+    noetige: [], // Untersuchungen, die noch gemacht werden müssen
+    geplante: [], // Untersuchungen, die schon geplant sind
+    nichtDurchgefuehrte: [], // Untersuchungen, die abgelehnt wurden
+    erledigte: [] // Untersuchungen, die schon erledigt sind
 };
 
 function saveExaminations() {
-    // Nur optional, falls clientseitige Speicherung gewünscht ist
+    // Speichert die Untersuchungen im Browser, damit sie nicht verloren gehen
     localStorage.setItem('examinations', JSON.stringify(examinations));
 }
 
-// Funktion zur Darstellung der Untersuchungen im DOM
+// Diese Funktion zeigt die Untersuchungen auf der Seite an
 function renderExaminations(containerId, category) {
-    const list = document.getElementById(containerId);
-    if (!list) return;
+    const list = document.getElementById(containerId); // Holt das Feld, wo die Untersuchungen stehen sollen
+    if (!list) return; // Wenn es das Feld nicht gibt, mache nichts
     list.innerHTML = '';
 
+    // Für jede Untersuchung in der Kategorie:
     examinations[category].forEach((examination, index) => {
-        // Prüfung: Ist der Eintrag ein Objekt mit id und name?
+        // Hole den Namen und die ID der Untersuchung
         const examName = typeof examination === 'object' && examination !== null ? examination.name : examination;
         const examId = typeof examination === 'object' && examination !== null ? examination.id : null;
-        const item = document.createElement('div');
+        const item = document.createElement('div'); // Mache ein neues Feld für die Untersuchung
         item.className = 'checkup-item';
         const icon = category === 'erledigte' ? '✓' : '>';
         if (category === 'erledigte') {
-            item.classList.add('completed');
+            item.classList.add('completed'); // Wenn erledigt, mache es grün
         }
         item.innerHTML = `
             <span>${examName}</span>
             <span class="icon">${icon}</span>
         `;
         item.dataset.examId = examId;
+        // Wenn man auf die Untersuchung klickt, zeigt sie mehr Knöpfe an
         item.addEventListener('click', function(e) {
             if (e.target.classList.contains('action-btn')) return;
             this.classList.toggle('active');
@@ -43,6 +45,7 @@ function renderExaminations(containerId, category) {
             } else {
                 const details = document.createElement('div');
                 details.className = 'checkup-details';
+                // Je nach Kategorie gibt es andere Knöpfe
                 if (category === 'noetige') {
                     details.innerHTML = `
                         <h3>Untersuchung verwalten</h3>
@@ -59,17 +62,40 @@ function renderExaminations(containerId, category) {
                         </div>
                     `;
                 } else if (category === 'geplante') {
+                    // Hole das gespeicherte Datum aus dem Objekt, falls vorhanden
+                    let dateValue = '';
+                    let nextExamDate = '';
+                    if (typeof examination === 'object' && examination !== null) {
+                        // Prüfe beide Varianten: direkt oder verschachtelt
+                        if (examination.naechste_untersuchung && examination.naechste_untersuchung !== 'null' && examination.naechste_untersuchung !== null && examination.naechste_untersuchung !== '') {
+                            nextExamDate = examination.naechste_untersuchung;
+                        } else if (
+                            examination.nutzer_untersuchung &&
+                            examination.nutzer_untersuchung.naechste_untersuchung &&
+                            examination.nutzer_untersuchung.naechste_untersuchung !== 'null' &&
+                            examination.nutzer_untersuchung.naechste_untersuchung !== null &&
+                            examination.nutzer_untersuchung.naechste_untersuchung !== ''
+                        ) {
+                            nextExamDate = examination.nutzer_untersuchung.naechste_untersuchung;
+                        }
+                    }
+                    if (nextExamDate && !isNaN(Date.parse(nextExamDate))) {
+                        dateValue = nextExamDate.split('T')[0];
+                    }
                     details.innerHTML = `
                         <h3>Details eintragen</h3>
                         <div class="form-group">
                             <label for="value">Wert</label>
-                            <input type="text" class="form-control" id="value" placeholder="Wert eintragen">
+                            <input type="text" class="form-control" id="value-${examId}" placeholder="Wert eintragen">
                         </div>
                         <div class="form-group">
                             <label for="date">Datum</label>
-                            <input type="date" class="form-control" id="date">
+                            <input type="date" class="form-control" id="date-${examId}"${dateValue ? ` value="${dateValue}"` : ''}>
                         </div>
                         <div class="examination-actions">
+                            <button class="action-btn secondary" onclick="saveExaminationDate('${category}', ${index})">
+                                Speichern
+                            </button>
                             <button class="action-btn secondary" onclick="updateStatusAndMove('${category}', ${index}, 'erledigte', 'erledigt')">
                                 Als Erledigt markieren
                             </button>
@@ -110,11 +136,10 @@ function renderExaminations(containerId, category) {
     });
 }
 
-// Neue Funktion zum Status-Update und Verschieben
+// Diese Funktion schickt an den Server, dass sich der Status geändert hat und verschiebt die Untersuchung
 window.updateStatusAndMove = function(fromCategory, index, toCategory, newStatus) {
     const examination = examinations[fromCategory][index];
-    // Annahme: Der Name ist eindeutig und entspricht dem Wert in der DB
-    // Hole die ID aus dem Backend oder speichere sie im JS, falls nötig
+    // Sagt dem Server: Ändere den Status!
     fetch('/php/update_examination_status.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -123,7 +148,7 @@ window.updateStatusAndMove = function(fromCategory, index, toCategory, newStatus
     .then(res => res.json())
     .then(data => {
         if (data.success) {
-            moveExamination(fromCategory, index, toCategory);
+            moveExamination(fromCategory, index, toCategory); // Verschiebe die Untersuchung in die neue Kategorie
         } else {
             alert('Status konnte nicht aktualisiert werden!');
         }
@@ -131,13 +156,13 @@ window.updateStatusAndMove = function(fromCategory, index, toCategory, newStatus
     .catch(() => alert('Fehler beim Status-Update!'));
 };
 
-// Dummy-Funktion: Hier muss die ID der Untersuchung aus dem Namen ermittelt werden
+// Diese Funktion holt die ID der Untersuchung
 function getExaminationId(examination) {
-    // Wenn examination ein Objekt ist, gib die id zurück
+    // Wenn es ein Objekt ist, nimm die id
     if (typeof examination === 'object' && examination.id) {
         return examination.id;
     }
-    // Fallback: Suche nach Name
+    // Sonst suche nach dem Namen
     for (const cat of Object.values(examinations)) {
         for (const ex of cat) {
             if (typeof ex === 'object' && ex.name === examination) {
@@ -145,13 +170,13 @@ function getExaminationId(examination) {
             }
         }
     }
-    return 0;
+    return 0; // Wenn nichts gefunden, gib 0 zurück
 }
 
-// Untersuchung zwischen Kategorien verschieben
+// Diese Funktion verschiebt die Untersuchung in eine andere Kategorie
 window.moveExamination = function(fromCategory, index, toCategory) {
     const examination = examinations[fromCategory][index];
-    examinations[fromCategory].splice(index, 1);
+    examinations[fromCategory].splice(index, 1); // Löscht die Untersuchung aus der alten Kategorie
     let newExam = examination;
     if (toCategory === 'erledigte') {
         const today = new Date().toLocaleDateString('de-DE');
@@ -161,8 +186,9 @@ window.moveExamination = function(fromCategory, index, toCategory) {
             newExam = `${examination} (${today})`;
         }
     }
-    examinations[toCategory].push(newExam);
+    examinations[toCategory].push(newExam); // Fügt die Untersuchung in die neue Kategorie ein
     saveExaminations();
+    // Zeigt die neue Liste an
     const currentPage = getCurrentPage();
     if (currentPage === 'noetige') {
         renderExaminations('noetige-list', 'noetige');
@@ -175,14 +201,14 @@ window.moveExamination = function(fromCategory, index, toCategory) {
     }
 }
 
-// Ermitteln der aktuellen Unterseite
+// Diese Funktion schaut, auf welcher Seite wir gerade sind
 function getCurrentPage() {
     const path = window.location.pathname;
     const page = path.substring(path.lastIndexOf('/') + 1);
     return page.split('.')[0] || 'index';
 }
 
-// Untersuchungen vom Backend laden
+// Holt die Untersuchungen vom Server und zeigt sie an
 fetch('/php/sync_examinations.php')
     .then(response => {
         if (!response.ok) {
@@ -195,9 +221,7 @@ fetch('/php/sync_examinations.php')
             console.error("Fehler in Daten:", data.error);
             return;
         }
-
-        examinations = data;
-
+        examinations = data; // Speichert die Untersuchungen
         const currentPage = getCurrentPage();
         if (currentPage === 'noetige') {
             renderExaminations('noetige-list', 'noetige');
@@ -212,3 +236,36 @@ fetch('/php/sync_examinations.php')
     .catch(error => {
         console.error("Fehler beim Abrufen der Daten:", error.message);
     });
+
+// Funktion zum Speichern des Datums in die Datenbank
+window.saveExaminationDate = function(category, index) {
+    const examination = examinations[category][index];
+    const examId = typeof examination === 'object' && examination !== null ? examination.id : null;
+    const dateValue = document.getElementById(`date-${examId}`).value;
+    if (!dateValue) {
+        alert('Bitte ein Datum eingeben!');
+        return;
+    }
+    fetch('/php/update_examination_status.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: `untersuchungen_id=${encodeURIComponent(examId)}&naechste_untersuchung=${encodeURIComponent(dateValue)}`
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            // Aktualisiere das Datum auch im lokalen Objekt, damit es beim erneuten Öffnen angezeigt wird
+            if (typeof examination === 'object' && examination !== null) {
+                if ('naechste_untersuchung' in examination) {
+                    examination.naechste_untersuchung = dateValue;
+                } else if (examination.nutzer_untersuchung && typeof examination.nutzer_untersuchung === 'object') {
+                    examination.nutzer_untersuchung.naechste_untersuchung = dateValue;
+                }
+            }
+            alert('Datum gespeichert!');
+        } else {
+            alert('Datum konnte nicht gespeichert werden!');
+        }
+    })
+    .catch(() => alert('Fehler beim Speichern des Datums!'));
+}

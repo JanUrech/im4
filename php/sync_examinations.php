@@ -48,7 +48,11 @@ foreach ($results as $row) {
     if ($status === 'offen') {
         $data['noetige'][] = ['id' => $id, 'name' => $name];
     } elseif ($status === 'geplant') {
-        $data['geplante'][] = ['id' => $id, 'name' => $name];
+        $data['geplante'][] = [
+            'id' => $id,
+            'name' => $name,
+            'naechste_untersuchung' => $naechste
+        ];
     } elseif ($status === 'erledigt') {
         $data['erledigte'][] = ['id' => $id, 'name' => $name];
     } elseif ($status === 'abgelehnt') {
