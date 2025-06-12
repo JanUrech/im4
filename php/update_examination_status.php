@@ -42,6 +42,19 @@ if ($naechsteUntersuchung) {
         'untersuchungen_id' => $untersuchungenId
     ]);
 }
+
+// --- NEU: Wenn naechste_untersuchung < heute, verschiebe sie nach letzte_untersuchung ---
+$heute = date('Y-m-d');
+if ($naechsteUntersuchung && $naechsteUntersuchung < $heute) {
+    // Setze letzte_untersuchung auf naechste_untersuchung, lösche naechste_untersuchung und setze Status auf erledigt
+    $stmt = $pdo->prepare('UPDATE nutzer_untersuchung SET letzte_untersuchung = :letzte, naechste_untersuchung = NULL, status = "erledigt" WHERE nutzer_id = :nutzer_id AND untersuchungen_id = :untersuchungen_id');
+    $stmt->execute([
+        'letzte' => $naechsteUntersuchung,
+        'nutzer_id' => $nutzerId,
+        'untersuchungen_id' => $untersuchungenId
+    ]);
+}
+
 // Datum der letzten Untersuchung speichern (für erledigte)
 if ($letzteUntersuchung) {
     $stmt = $pdo->prepare('UPDATE nutzer_untersuchung SET letzte_untersuchung = :letzte_untersuchung WHERE nutzer_id = :nutzer_id AND untersuchungen_id = :untersuchungen_id');
@@ -70,4 +83,7 @@ if ($letzteUntersuchung) {
 }
 
 // Erfolgsmeldung zurückgeben
-echo json_encode(['success' => true]);
+// Nach jedem Update: Status automatisch anpassen
+require_once __DIR__ . '/auto_update_status.php';
+// Skript beenden, damit nicht zweimal JSON ausgegeben wird
+exit;

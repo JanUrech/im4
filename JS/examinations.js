@@ -49,15 +49,20 @@ function renderExaminations(containerId, category) {
                 if (category === 'noetige') {
                     details.innerHTML = `
                         <h3>Untersuchung verwalten</h3>
+                        <div class="form-group">
+                            <label for="last-date-${examId}">Letzter Untersuch</label>
+                            <input type="date" class="form-control" id="last-date-${examId}">
+                        </div>
+                        <div class="form-group">
+                            <label for="next-date-${examId}">Geplanter Untersuch</label>
+                            <input type="date" class="form-control" id="next-date-${examId}">
+                        </div>
                         <div class="examination-actions">
-                            <button class="action-btn" onclick="updateStatusAndMove('${category}', ${index}, 'geplante', 'geplant')">
-                                Zu Geplante
+                            <button class="action-btn secondary" onclick="saveNoetigeDates('${category}', ${index})">
+                                Speichern
                             </button>
-                            <button class="action-btn" onclick="updateStatusAndMove('${category}', ${index}, 'nichtDurchgefuehrte', 'abgelehnt')">
-                                Zu Nicht durchgeführte
-                            </button>
-                            <button class="action-btn secondary" onclick="updateStatusAndMove('${category}', ${index}, 'erledigte', 'erledigt')">
-                                Als Erledigt markieren
+                            <button class="action-btn" onclick="rejectNoetige('${category}', ${index})">
+                                Ablehnen
                             </button>
                         </div>
                     `;
@@ -107,12 +112,6 @@ function renderExaminations(containerId, category) {
                         <div class="examination-actions">
                             <button class="action-btn" onclick="updateStatusAndMove('${category}', ${index}, 'noetige', 'offen')">
                                 Zurück zu Nötige
-                            </button>
-                            <button class="action-btn" onclick="updateStatusAndMove('${category}', ${index}, 'geplante', 'geplant')">
-                                Zu Geplante
-                            </button>
-                            <button class="action-btn secondary" onclick="updateStatusAndMove('${category}', ${index}, 'nichtDurchgefuehrte', 'abgelehnt')">
-                                Als Nicht durchgeführt markieren
                             </button>
                         </div>
                     `;
@@ -298,4 +297,53 @@ window.saveExaminationDate = function(category, index) {
         }
     })
     .catch(() => alert('Fehler beim Speichern des Datums!'));
+}
+
+// Neue Funktion zum Speichern der Daten für nötige Untersuchungen
+window.saveNoetigeDates = function(category, index) {
+    const examination = examinations[category][index];
+    const examId = typeof examination === 'object' && examination !== null ? examination.id : null;
+    const lastDate = document.getElementById(`last-date-${examId}`).value;
+    const nextDate = document.getElementById(`next-date-${examId}`).value;
+    if (!lastDate && !nextDate) {
+        alert('Bitte mindestens ein Datum eingeben!');
+        return;
+    }
+    let body = `untersuchungen_id=${encodeURIComponent(examId)}`;
+    if (lastDate) body += `&letzte_untersuchung=${encodeURIComponent(lastDate)}`;
+    if (nextDate) body += `&naechste_untersuchung=${encodeURIComponent(nextDate)}`;
+    fetch('/php/update_examination_status.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            alert('Datum gespeichert!');
+        } else {
+            alert('Datum konnte nicht gespeichert werden!');
+        }
+    })
+    .catch(() => alert('Fehler beim Speichern des Datums!'));
+}
+
+// Funktion für Ablehnen-Button bei nötigen Untersuchungen
+window.rejectNoetige = function(category, index) {
+    const examination = examinations[category][index];
+    const examId = typeof examination === 'object' && examination !== null ? examination.id : null;
+    fetch('/php/update_examination_status.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: `untersuchungen_id=${encodeURIComponent(examId)}&status=abgelehnt`
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            moveExamination(category, index, 'nichtDurchgefuehrte');
+        } else {
+            alert('Status konnte nicht aktualisiert werden!');
+        }
+    })
+    .catch(() => alert('Fehler beim Status-Update!'));
 }
