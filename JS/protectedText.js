@@ -13,9 +13,7 @@ fetch("php/protected.php")
         }
 
         else {
-            document.getElementById("welcome-message").innerHTML = "Willkommen" + data.firstname
-        
-
+            // Welcome-Message entfernt
         }
     })
     .catch((error) => {
