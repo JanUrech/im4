@@ -1100,7 +1100,7 @@ body {
     }
     
     .arzt-neu-btn, .arzt-info-btn {
-        padding: 12px 15px;
+        padding: 12px 50px;
         font-size: 14px;
         flex: 1;
     }
