@@ -54,6 +54,8 @@ function initArztDropdowns() {
         const select = document.createElement('select');
         select.className = 'form-control arzt-dropdown';
         select.id = input.id;
+        // Merke gespeicherte arzt_id (falls vorhanden)
+        const savedArztId = input.dataset.arztId || '';
         // Lade Ärzte dynamisch
         fetch('php/aerzteDatenbank.php')
             .then(res => res.json())
@@ -66,10 +68,14 @@ function initArztDropdowns() {
                 if (Array.isArray(aerzte)) {
                     aerzte.forEach(arzt => {
                         const option = document.createElement('option');
-                        option.value = arzt.id;
+                        option.value = String(arzt.id); // Immer als String
                         option.textContent = arzt.name;
                         select.appendChild(option);
                     });
+                    // Nach dem Hinzufügen aller Optionen: Vorauswahl setzen (asynchron, damit DOM ready)
+                    if (savedArztId) {
+                        setTimeout(() => { select.value = String(savedArztId); }, 0);
+                    }
                 } else {
                     // Fehlerfall: Fallback-Optionen
                     const fallback = document.createElement('option');

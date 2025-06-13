@@ -17,6 +17,7 @@ $untersuchungenId = $_POST['untersuchungen_id'] ?? null; // ID der Untersuchung
 $status = $_POST['status'] ?? null; // Neuer Status
 $naechsteUntersuchung = $_POST['naechste_untersuchung'] ?? null; // Neues Datum
 $letzteUntersuchung = $_POST['letzte_untersuchung'] ?? null; // Neues Datum für erledigte
+$arztId = $_POST['arzt_id'] ?? null; // Arzt-ID (optional)
 
 // Prüfen, ob mindestens eine Aktion übergeben wurde
 if (!$untersuchungenId || (!$status && !$naechsteUntersuchung && !$letzteUntersuchung)) {
@@ -80,6 +81,16 @@ if ($letzteUntersuchung) {
             'untersuchungen_id' => $untersuchungenId
         ]);
     }
+}
+
+// Arzt-ID speichern
+if ($arztId) {
+    $stmt = $pdo->prepare('UPDATE nutzer_untersuchung SET arzt_id = :arzt_id WHERE nutzer_id = :nutzer_id AND untersuchungen_id = :untersuchungen_id');
+    $stmt->execute([
+        'arzt_id' => $arztId,
+        'nutzer_id' => $nutzerId,
+        'untersuchungen_id' => $untersuchungenId
+    ]);
 }
 
 // Erfolgsmeldung zurückgeben

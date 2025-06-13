@@ -69,6 +69,11 @@ function renderExaminations(containerId, category) {
                 } else if (category === 'geplante' || category === 'erledigte') {
                     // Hole das gespeicherte Datum aus dem Objekt, falls vorhanden
                     let dateValue = '';
+                    let arztIdValue = '';
+                    if (typeof examination === 'object' && examination.arzt_id) {
+                        arztIdValue = examination.arzt_id;
+                    }
+                    console.log('Render Arzt-Dropdown für', examId, 'arztIdValue:', arztIdValue, examination);
                     if (category === 'erledigte') {
                         if (typeof examination === 'object' && examination.letzte_untersuchung && examination.letzte_untersuchung !== 'null' && examination.letzte_untersuchung !== null && examination.letzte_untersuchung !== '') {
                             dateValue = examination.letzte_untersuchung.split('T')[0];
@@ -96,7 +101,7 @@ function renderExaminations(containerId, category) {
                         <h3>Details eintragen</h3>
                         <div class="form-group">
                             <label for="value-${examId}">Arzt</label>
-                            <input id="value-${examId}" class="form-control" type="text" placeholder="Arzt wählen">
+                            <input id="value-${examId}" class="form-control" type="text" placeholder="Arzt wählen" data-arzt-id="${arztIdValue || ''}">
                         </div>
                         <div class="form-group">
                             <label for="date">Datum</label>
@@ -245,11 +250,18 @@ window.saveExaminationDate = function(category, index) {
     const examination = examinations[category][index];
     const examId = typeof examination === 'object' && examination !== null ? examination.id : null;
     const dateValue = document.getElementById(`date-${examId}`).value;
+    // Arzt-ID aus Dropdown holen (wenn vorhanden)
+    let arztId = '';
+    const arztDropdown = document.getElementById(`value-${examId}`)?.parentNode?.querySelector('select.arzt-dropdown');
+    if (arztDropdown) {
+        arztId = arztDropdown.value;
+    }
     if (!dateValue) {
         alert('Bitte ein Datum eingeben!');
         return;
     }
     let body = `untersuchungen_id=${encodeURIComponent(examId)}`;
+    if (arztId) body += `&arzt_id=${encodeURIComponent(arztId)}`;
     if (category === 'geplante') {
         body += `&naechste_untersuchung=${encodeURIComponent(dateValue)}`;
     } else if (category === 'erledigte') {
@@ -271,6 +283,9 @@ window.saveExaminationDate = function(category, index) {
                     examination.nutzer_untersuchung.naechste_untersuchung = dateValue;
                 } else if (category === 'erledigte' && 'letzte_untersuchung' in examination) {
                     examination.letzte_untersuchung = dateValue;
+                }
+                if (arztId) {
+                    examination.arzt_id = arztId;
                 }
             }
             alert('Datum gespeichert!');
