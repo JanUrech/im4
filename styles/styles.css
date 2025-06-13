@@ -861,3 +861,363 @@ body {
     margin: 10px auto;
 }
 }
+
+/* ARZT DROPDOWN & MODAL STYLES - For arztDropdown.js */
+
+/* Dropdown Wrapper */
+.arzt-dropdown-wrapper {
+    display: flex !important;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.arzt-dropdown {
+    flex: 1;
+    min-width: 150px;
+    padding: 12px 15px;
+    border-radius: 25px;
+    border: none;
+    background-color: white;
+    color: #14363e;
+    font-size: 16px;
+    cursor: pointer;
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease, transform 0.2s ease;
+}
+
+.arzt-dropdown:focus {
+    outline: none;
+    box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.15), 0 0 0 3px rgba(26, 74, 85, 0.3);
+    transform: translateY(-1px);
+}
+
+.arzt-dropdown option {
+    padding: 10px;
+    background-color: white;
+    color: #14363e;
+}
+
+/* Neu & Info Buttons */
+.arzt-neu-btn, .arzt-info-btn {
+    background-color: #b8dce2;
+    color: #14363e;
+    border: none;
+    border-radius: 20px;
+    padding: 12px 20px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: inset -10px -12px 6px -3px rgba(0, 0, 0, 0.1), inset 10px 14px 6px 0px rgba(107, 107, 107, 0.15);
+    white-space: nowrap;
+    min-width: 60px;
+}
+
+.arzt-neu-btn:hover, .arzt-info-btn:hover {
+    background-color: #a0d0d6;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.arzt-info-btn {
+    background-color: #ffffff;
+    color: #14363e;
+}
+
+.arzt-info-btn:hover {
+    background-color: #f0f0f0;
+}
+
+/* Modal Overlay */
+.arzt-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+    padding: 20px;
+    backdrop-filter: blur(5px);
+    animation: fadeIn 0.3s ease;
+}
+
+/* Modal Box */
+.arzt-modal-box {
+    background-color: #14363e;
+    border-radius: 30px;
+    padding: 30px 25px;
+    max-width: 500px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    color: white;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    animation: slideUp 0.3s ease;
+    position: relative;
+}
+
+/* Modal Title */
+.arzt-modal-title {
+    text-align: center;
+    margin-bottom: 25px;
+    font-size: 22px;
+    color: white;
+    font-weight: bold;
+}
+
+/* Form Groups */
+.arzt-modal-form-group {
+    margin-bottom: 20px;
+}
+
+.arzt-modal-label {
+    display: block;
+    color: white;
+    font-weight: bold;
+    margin-bottom: 8px;
+    font-size: 16px;
+}
+
+/* Form Controls inside Modal */
+.arzt-modal-box .form-control {
+    width: 100%;
+    padding: 15px 20px;
+    border-radius: 25px;
+    border: none;
+    background-color: white;
+    color: #14363e;
+    font-size: 16px;
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease, transform 0.2s ease;
+    box-sizing: border-box;
+}
+
+.arzt-modal-box .form-control:focus {
+    outline: none;
+    box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.15), 0 0 0 3px rgba(184, 220, 226, 0.5);
+    transform: translateY(-1px);
+}
+
+.arzt-modal-box .form-control::placeholder {
+    color: #999;
+    font-style: italic;
+}
+
+/* Modal Buttons Row */
+.arzt-modal-btn-row {
+    display: flex;
+    gap: 15px;
+    margin-top: 30px;
+    justify-content: center;
+}
+
+.arzt-modal-btn {
+    padding: 15px 30px;
+    border-radius: 25px;
+    border: none;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    flex: 1;
+    max-width: 150px;
+    box-shadow: inset -15px -18px 8px -3px rgba(0, 0, 0, 0.15), inset 15px 20px 8px 0px rgba(107, 107, 107, 0.2);
+}
+
+/* Primary Modal Button (Abbrechen) */
+.arzt-modal-btn {
+    background-color: #b8dce2;
+    color: #14363e;
+}
+
+.arzt-modal-btn:hover {
+    background-color: #a0d0d6;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Secondary Modal Button (Speichern) */
+.arzt-modal-btn.secondary {
+    background-color: white;
+    color: #14363e;
+}
+
+.arzt-modal-btn.secondary:hover {
+    background-color: #f0f0f0;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Info Modal Specific Styles */
+.arzt-modal-box .arzt-modal-form-group a {
+    color: #b8dce2;
+    text-decoration: underline;
+}
+
+.arzt-modal-box .arzt-modal-form-group a:hover {
+    color: #a0d0d6;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* RESPONSIVE STYLES */
+
+/* Mobile Styles */
+@media (max-width: 480px) {
+    .arzt-dropdown-wrapper {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+    }
+    
+    .arzt-dropdown {
+        width: 100%;
+        margin-bottom: 5px;
+    }
+    
+    .arzt-neu-btn, .arzt-info-btn {
+        padding: 12px 15px;
+        font-size: 14px;
+        flex: 1;
+    }
+    
+    .arzt-modal-box {
+        margin: 10px;
+        padding: 25px 20px;
+        border-radius: 25px;
+    }
+    
+    .arzt-modal-title {
+        font-size: 20px;
+    }
+    
+    .arzt-modal-btn-row {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .arzt-modal-btn {
+        max-width: none;
+        width: 100%;
+    }
+}
+
+/* Tablet Styles */
+@media (min-width: 481px) and (max-width: 768px) {
+    .arzt-dropdown-wrapper {
+        gap: 12px;
+    }
+    
+    .arzt-neu-btn, .arzt-info-btn {
+        padding: 14px 22px;
+        font-size: 15px;
+        min-width: 70px;
+    }
+    
+    .arzt-modal-box {
+        padding: 35px 30px;
+        max-width: 450px;
+    }
+}
+
+/* Desktop Styles */
+@media (min-width: 769px) {
+    .arzt-dropdown-wrapper {
+        gap: 15px;
+    }
+    
+    .arzt-dropdown {
+        padding: 15px 20px;
+        font-size: 17px;
+    }
+    
+    .arzt-dropdown:hover {
+        transform: translateY(-1px);
+        box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.1), 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    
+    .arzt-neu-btn, .arzt-info-btn {
+        padding: 15px 25px;
+        font-size: 16px;
+        min-width: 80px;
+        border-radius: 25px;
+    }
+    
+    .arzt-modal-box {
+        padding: 40px;
+        border-radius: 25px;
+        max-width: 600px;
+    }
+    
+    .arzt-modal-title {
+        font-size: 26px;
+        margin-bottom: 30px;
+    }
+    
+    .arzt-modal-btn {
+        padding: 18px 35px;
+        font-size: 18px;
+        max-width: 180px;
+    }
+    
+    /* Enhanced hover effects for desktop */
+    .arzt-modal-box {
+        transition: transform 0.3s ease;
+    }
+    
+    .arzt-modal-overlay {
+        backdrop-filter: blur(8px);
+    }
+}
+
+/* Form validation styles */
+.arzt-modal-box .form-control:invalid {
+    box-shadow: inset 0 2px 8px rgba(255, 0, 0, 0.2), 0 0 0 2px rgba(255, 107, 107, 0.3);
+}
+
+.arzt-modal-box .form-control:valid {
+    box-shadow: inset 0 2px 8px rgba(0, 255, 0, 0.1), 0 0 0 2px rgba(81, 207, 102, 0.2);
+}
+
+/* Scrollbar for modal content */
+.arzt-modal-box::-webkit-scrollbar {
+    width: 6px;
+}
+
+.arzt-modal-box::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+}
+
+.arzt-modal-box::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 3px;
+}
+
+.arzt-modal-box::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.5);
+}
